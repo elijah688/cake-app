@@ -1,7 +1,8 @@
 <ul class="cake-list__list">
     <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
         <app-cake 
-        [title]="cake.title" 
+        [title]="cake.title"
+        [imagePath]="cake.imagePath" 
         [comment]="cake.comment"
         [stars]="cake.stars"></app-cake>
     </li>

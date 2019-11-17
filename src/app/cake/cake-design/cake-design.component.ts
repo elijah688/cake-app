@@ -61,12 +61,12 @@ export class CakeDesignComponent implements OnInit {
   addCake(){
     const title:string = this.cakeForm.get('title').value;
     const comment:string = this.cakeForm.get('comment').value;
-    const imagePath:string = this.imgUrl;
+    const file:string = this.cakeForm.get('image').value;
 
     const cake: Cake = {
       title: title,
       comment: comment,
-      imagePath: imagePath,
+      image: file,
       stars: this.stars
     }
 

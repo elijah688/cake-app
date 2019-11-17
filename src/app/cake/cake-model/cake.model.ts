@@ -2,6 +2,6 @@ export interface Cake {
     id?:string,
     title: string,
     comment: string,
-    imagePath?: string,
-    stars: boolean[],
+    image: string | File,
+    stars: boolean[], 
 }

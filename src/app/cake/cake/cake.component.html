@@ -15,7 +15,7 @@
 
     </mat-card-header>
 
-    <img class="cake-card__image" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <img class="cake-card__image" mat-card-image [src]="imagePath" [alt]="title">
     
     <mat-card-content class="cake-card__content">
         <mat-divider [inset]="true"></mat-divider>

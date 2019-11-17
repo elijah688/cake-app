@@ -1,31 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Cake } from '../cake-model/cake.model';
+import { CakeService } from '../cake-service/cake.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cake-list',
   templateUrl: './cake-list.component.html',
   styleUrls: ['./cake-list.component.sass']
 })
-export class CakeListComponent implements OnInit {
+export class CakeListComponent implements OnInit, OnDestroy {
+  
 
-  public cake: Cake = {
-    title: 'My Cake',
-    comment:"The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.",
-    stars: [true, true, true, false, false] 
-  };
+  public cakesSubscription:Subscription = new Subscription();
+  public cakes: Cake[] = [];
 
-  public cake2: Cake = {
-    title: 'My Cake',
-    comment:"The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.",
-    stars: [true,true,true,true,true] 
-  };
-
-  public cakes: Cake[] = [this.cake, this.cake2];
-
-
-  constructor() { }
+  constructor(private cakeService:CakeService) { }
 
   ngOnInit() {
+    this.cakeService.getCakes();
+    this.cakesSubscription = this.cakeService.cakesSubject.subscribe(cakes=>{
+      this.cakes = cakes;
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.cakesSubscription.unsubscribe();
   }
 
 }
