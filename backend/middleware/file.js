@@ -11,15 +11,6 @@ const MIME_TYPE = {
 
 
 const storage = multer.diskStorage({
-    fileFilter: (req, file, cb) =>{
-        if(MIME_TYPE[file.mimetype]!==undefined){
-            cb(null, true);
-        }
-        else{
-            const error = new Error("Only images are allowed!")
-            cb(error, false);
-        }
-    },
     destination: (req, file, cb) => {
         const imagePath = path.join(__dirname,'../images'); 
         cb(null, imagePath)
@@ -32,5 +23,18 @@ const storage = multer.diskStorage({
     }
   })
 
-  module.exports = multer({storage:storage}).single('image');
+module.exports = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) =>{
+        let error;
+        if(MIME_TYPE[file.mimetype]===undefined){
+            const error = new Error("Only images are allowed!")
+            req.multerError = error;
+            cb(null, false);
+        }
+        else{
+            cb(null, true);
+        }
+    },
+}).single('image');
   

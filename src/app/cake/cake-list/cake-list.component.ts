@@ -21,6 +21,7 @@ export class CakeListComponent implements OnInit, OnDestroy {
     this.cakesSubscription = this.cakeService.cakesSubject.subscribe(cakes=>{
       this.cakes = cakes;
     })
+
   }
 
   ngOnDestroy(): void {

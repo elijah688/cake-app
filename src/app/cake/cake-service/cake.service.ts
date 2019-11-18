@@ -13,6 +13,7 @@ const BACKEND_URL:string = environment.apiUrl +'/cake';
 })
 export class CakeService {
   private _cakesSubject:Subject<Cake[]> = new Subject<Cake[]>();
+  private _patchCakeSubject:Subject<Cake> = new Subject<Cake>();
 
   constructor(private http:HttpClient) { }
 
@@ -49,19 +50,75 @@ export class CakeService {
       })
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+
+  editCake(cake:Cake):void{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'my-auth-token'
+      })
+    };
+    const id:string = cake.id;
+    const title:string = cake.title;
+    const comment:string = cake.comment;
+    const image:File | string = cake.image;
+    const stars:string = JSON.stringify(cake.stars);
+
+
+    const cakeData = new FormData();
+    cakeData.append("title", title);
+    cakeData.append("comment", comment);
+    cakeData.append("stars", stars);
+
+    if(typeof(image)==='string'){
+      cakeData.append("image", image);
     }
+    else{
+      cakeData.append("image", image, title);
+    }
+   
+
+
+    this.http.patch<{message:string}>(`${BACKEND_URL}/${id}`, cakeData)
+      .pipe(
+        catchError(this.handleError))
+      .subscribe(res=>{
+        console.log(res.message)
+        this.getCakes();
+      });
+  }
+
+
+  deleteCake(id:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'my-auth-token'
+      })
+    };
+    this.http.delete<{message:string}>(`${BACKEND_URL}/${id}`, httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    ).subscribe(res=>{
+      console.log(res.message);
+      this.getCakes();
+    });
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.log(error.error);
     return throwError(error);
   }
 
   get cakesSubject():Observable<Cake[]>{
     return this._cakesSubject.asObservable();
+  }
+
+  get patchCakeSubject():Observable<Cake>{
+    return this._patchCakeSubject.asObservable();
+  }
+
+
+  editPatchForm(cake:Cake):void{
+    this._patchCakeSubject.next(cake);    
   }
 
 

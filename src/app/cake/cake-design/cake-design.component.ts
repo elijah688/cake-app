@@ -1,22 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { CakeService } from '../cake-service/cake.service';
 import { Cake } from '../cake-model/cake.model';
+import { Subscription } from 'rxjs';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-cake-design',
   templateUrl: './cake-design.component.html',
   styleUrls: ['./cake-design.component.sass']
 })
-export class CakeDesignComponent implements OnInit {
+export class CakeDesignComponent implements OnInit, OnDestroy {
+  public id:string;
   public stars:boolean[] = [false, false, false, false, false];
   public imgUrl:string;
   public cakeForm = this.fb.group({
-    title: [''],
-    comment: [''],
-    image: [null]
+    title: ['',[Validators.required]],
+    comment: ['',[Validators.required]],
+    image: [null, [Validators.required]]
   });
    
+  @ViewChild('myForm', {static: false}) myform: NgForm;
+
+  public isEditing: boolean = false;
+  public patchCakeSub:Subscription = new Subscription();
+  public imageButtonTouched:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -24,6 +32,9 @@ export class CakeDesignComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.patchCakeSub = this.cakeService.patchCakeSubject.subscribe(cake=>{
+     this.patchValuesOnEdit(cake);
+    })
   }
 
 
@@ -59,18 +70,80 @@ export class CakeDesignComponent implements OnInit {
 
 
   addCake(){
-    const title:string = this.cakeForm.get('title').value;
-    const comment:string = this.cakeForm.get('comment').value;
-    const file:string = this.cakeForm.get('image').value;
+    if(this.cakeForm.valid===true){
+      const title:string = this.cakeForm.get('title').value;
+      const comment:string = this.cakeForm.get('comment').value;
+      const file:string = this.cakeForm.get('image').value;
+  
+      const cake: Cake = {
+        title: title,
+        comment: comment,
+        image: file,
+        stars: this.stars
+      }
+  
+      this.cakeService.addCake(cake);
 
-    const cake: Cake = {
-      title: title,
-      comment: comment,
-      image: file,
-      stars: this.stars
+      this.id = undefined;
+      this.imgUrl = undefined;
+      this.stars = Array(5).fill(false);;
+      this.imageButtonTouched = false;
+      this.cakeForm.reset();
+      this.myform.resetForm();
     }
+   
+  }
 
-    this.cakeService.addCake(cake);
+  patchValuesOnEdit(cake:Cake){
+    const id:string = cake.id;
+    const title:string = cake.title;
+    const comment: string = cake.comment;
+    const imagePath: string | File = cake.image;
+    const stars: boolean[] = cake.stars;
+
+    this.id = id;
+    this.cakeForm.patchValue({title: title, comment: comment, image: imagePath});
+    this.stars = stars;
+    this.imgUrl = (imagePath as string);
+
+    this.isEditing = true;
+
+    console.log(this.id)
+
+  }
+
+  ngOnDestroy(){
+    this.patchCakeSub.unsubscribe();
+  }
+
+  editCake(){
+    if(this.cakeForm.valid===true){
+      let id:string = this.id; 
+      const title: string = this.cakeForm.get("title").value;
+      const comment:string = this.cakeForm.get("comment").value;
+      const imageForm: File = this.cakeForm.get('image').value;
+      const stars: boolean[] = this.stars;
+      let image: string | File; 
+      if(imageForm===undefined){
+        image = this.imgUrl;
+      }
+      else{
+        image = imageForm;
+      }
+  
+      const cake:Cake = {id:id, title:title, comment:comment, image:image, stars:stars}
+      this.cakeService.editCake(cake);
+  
+
+      this.id = undefined;
+      this.imgUrl = undefined;
+      this.stars = Array(5).fill(false);
+      this.imageButtonTouched = false;
+      this.isEditing= false;
+      this.cakeForm.reset();
+      this.myform.resetForm();
+    }
+    
   }
 
 

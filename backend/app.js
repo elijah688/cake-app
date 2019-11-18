@@ -34,7 +34,7 @@ app.use("/api/user", authRoutes);
 app.use((err, req, res, next) =>{
     console.log('ERROR==============================================================')
     console.error(err.stack)
-    res.send('Something broke!')
+    res.json(err.message);
 });
 
 module.exports = app;

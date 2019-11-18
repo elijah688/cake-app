@@ -6,7 +6,7 @@
     </mat-card-header>
     <mat-card-content class="cake-design__card-content">
 
-        <form [formGroup]="cakeForm" class="cake-design__form">
+        <form #myForm="ngForm" [formGroup]="cakeForm" (ngSubmit)="isEditing==true ? addCake() : editCake()" class="cake-design__form">
 
             <mat-form-field color="accent" class="cake-design__form-title">
                 <mat-label>
@@ -16,6 +16,13 @@
                 </mat-label>
                 <input formControlName="title" matInput placeholder="Super Tasty Cake" (focus)="titleIcon.color='accent'" (blur)="titleIcon.color='none'">
                 <mat-icon #titleIcon matSuffix>cake</mat-icon>
+                <mat-error *ngIf="cakeForm.get('title').hasError('required')">
+                     <span>
+                        <b>Cake</b>
+                        <i> title</i>
+                      </span> 
+                      is required!
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field color="accent" class="cake-design__form-comment">
@@ -26,10 +33,17 @@
                 </mat-label>
                 <textarea cols="30" rows="5" formControlName="comment" matInput placeholder="My fave, delicious!" (focus)="commentIcon.color='accent'" (blur)="commentIcon.color='none'"></textarea>
                 <mat-icon #commentIcon matSuffix>comment</mat-icon>
+                <mat-error *ngIf="cakeForm.get('comment').hasError('required')">
+                        <span>
+                           <b>Cake</b>
+                           <i> comment</i>
+                         </span> 
+                         is required!
+                   </mat-error>
             </mat-form-field>
 
 
-            <div class="cake-design__form-image-preview--container">
+            <div *ngIf="imgUrl!==undefined" class="cake-design__form-image-preview--container">
                 <img class="cake-design__form-image-preview" [src]="imgUrl" [alt]="cakeForm.get('title').value">
             </div>
 
@@ -47,10 +61,17 @@
     <mat-card-actions class="cake-design__card-controls">
 
         <div class="cake-design__form-image-upload">
-            <button (click)="input.click()" class="cake-design__form-image-upload__button" mat-stroked-button color="accent">Upload Image</button>
+            <button (click)="input.click(); imageButtonTouched=true" class="cake-design__form-image-upload__button" mat-stroked-button color="accent">Upload Image</button>
             <input (change)="previewFile($event)" #input class="cake-design__form-image-upload__input" type="file">
+            <mat-error *ngIf="cakeForm.get('image').hasError('required') && imageButtonTouched===true">
+                <span>
+                    <b>Cake</b>
+                    <i> image</i>
+                </span> 
+                is required
+            </mat-error>
         </div>
-        <button (click)="addCake()" mat-flat-button color='accent'>Add Cake</button>
+        <button type="button" (click)="isEditing===true ? editCake() : addCake(); myForm.ngSubmit.emit()" mat-flat-button color='accent'>{{isEditing===true ? 'Edit Cake' : 'Add Cake'}}</button>
     </mat-card-actions>
 </mat-card>
 

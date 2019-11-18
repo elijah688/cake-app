@@ -4,6 +4,10 @@ const Cake = require('../models/cake')
 const extractFile = require('../middleware/file');
 
 router.post('', extractFile, (req, res, next) => {
+    if(req.multerError!==undefined){
+        res.status(422);
+        next(req.multerError);
+    }
     const title = req.body.title;
     const comment = req.body.comment;
     const stars = JSON.parse(req.body.stars);
@@ -12,8 +16,6 @@ router.post('', extractFile, (req, res, next) => {
     const host = req.get('host');
     const filename = req.file.filename;
     const imagePath = `${protocol}://${host}/images/${filename}`;
-    console.log(imagePath);
-
 
     const newCake = new Cake({
         title: title,
@@ -47,7 +49,6 @@ router.post('', extractFile, (req, res, next) => {
 router.get('', (req, res,next) => {
     Cake.find({})
         .then(cakes=>{
-
             const resCakes = cakes.map(x=>{
                 return {
                     id:x._id,
@@ -69,6 +70,66 @@ router.get('', (req, res,next) => {
         });
 })
 
+router.patch('/:id', extractFile,(req, res, next)=> {
+    if(req.multerError!==undefined){
+        res.status(422);
+        next(req.multerError);
+    }
+    
+    const id = req.params.id;
+    const title = req.body.title;
+    const comment = req.body.comment;
+    const stars = JSON.parse(req.body.stars);
+    let image;
+        if(req.file!==undefined){
+            const protocol = req.protocol;
+            const host = req.get('host');
+            const name = req.file.filename;
+            image = `${protocol}://${host}/images/${name}`;
+        }
+        else{
+            image = req.body.image;
+        }
+
+    Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:image, stars:stars})
+        .then(cake=>{
+            if(cake===undefined){
+                res.status(404).json({
+                    message: "NO SUCH CAKE!"
+                })
+            }
+            else{
+                res.status(202).json({
+                    message:`CAKE WITH ${id} UPDATED!`
+                });
+            }
+        })
+        .catch(err=>{
+            next(err);
+        });
+});
+
+router.delete('/:id', (req, res, next) => {
+    const id = req.params.id;
+    Cake.findByIdAndDelete(id)
+        .then(cake=>{
+            if(cake===undefined){
+                res.status(404).json({
+                    message: "NO SUCH CAKE!"
+                })
+            }
+            else{
+                res.status(200).json({
+                    message: `CAKE WITH ${id} SUCCESSFULLY DELETED`
+                })
+            }
+        })
+        .catch(err=>{
+            res.status(500)
+            next(err);
+        })
+        
+});
 
 
 
