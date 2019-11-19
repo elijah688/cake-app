@@ -6,6 +6,7 @@ var CakeSchema = new mongoose.Schema({
     comment: { type: String, required: true },
     imagePath: { type: String, required: true },
     stars: { type: [Boolean], required: true },
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 

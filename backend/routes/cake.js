@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Cake = require('../models/cake')
 const extractFile = require('../middleware/file');
+const guard = require("../middleware/guard");
 
-router.post('', extractFile, (req, res, next) => {
+
+router.post('', guard, extractFile, (req, res, next) => {
     if(req.multerError!==undefined){
         res.status(422);
         next(req.multerError);
@@ -11,17 +13,20 @@ router.post('', extractFile, (req, res, next) => {
     const title = req.body.title;
     const comment = req.body.comment;
     const stars = JSON.parse(req.body.stars);
+    const creator = res.userData.id;
 
     const protocol = req.protocol;
     const host = req.get('host');
     const filename = req.file.filename;
     const imagePath = `${protocol}://${host}/images/${filename}`;
 
+
     const newCake = new Cake({
         title: title,
         comment: comment,
         imagePath: imagePath,
-        stars: stars
+        stars: stars,
+        creator: creator
     });
 
     newCake.save()
@@ -55,7 +60,8 @@ router.get('', (req, res,next) => {
                     title: x.title,
                     comment:x.comment, 
                     imagePath: x.imagePath, 
-                    stars:x.stars
+                    stars:x.stars,
+                    creator:x.creator
                 }
             });
 
@@ -70,7 +76,7 @@ router.get('', (req, res,next) => {
         });
 })
 
-router.put('/:id', extractFile,(req, res, next)=> {
+router.put('/:id', guard, extractFile,(req, res, next)=> {
     if(req.multerError!==undefined){
         res.status(422);
         next(req.multerError);
@@ -90,45 +96,70 @@ router.put('/:id', extractFile,(req, res, next)=> {
         else{
             image = req.body.image;
         }
+    const userId = res.userData.id;
+    const creator = req.body.creator;
 
-    Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:image, stars:stars})
+    if(userId===creator){
+        Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:image, stars:stars})
         .then(cake=>{
-            if(cake===undefined){
-                res.status(404).json({
-                    message: "NO SUCH CAKE!"
-                })
-            }
-            else{
+            if(cake){
                 res.status(202).json({
                     message:`CAKE WITH ${id} UPDATED!`
                 });
+            }
+            else{
+                res.status(404).json({
+                    message: "NO SUCH CAKE!"
+                })
             }
         })
         .catch(err=>{
             next(err);
         });
+    }
+    else{
+        res.status(403).json(
+            {message:"YOU ARE UNAUTHORIZED!"
+        });
+    }
+   
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', guard, (req, res, next) => {
     const id = req.params.id;
-    Cake.findByIdAndDelete(id)
+    const userId = res.userData.id;
+
+    Cake.findOne({_id : id})
         .then(cake=>{
-            if(cake===undefined){
+            if(cake){
+                if(cake.creator.toString()===userId){
+                    Cake.findByIdAndDelete(id)
+                        .then(cake=>{
+                            res.status(200).json({
+                                message: `CAKE WITH ${id} SUCCESSFULLY DELETED`
+                            })
+                        })
+                        .catch(err=>{
+                            res.status(500)
+                            next(err);
+                        })
+                }
+                else{
+                    res.status(403).json({
+                        message:"YOU ARE UNAUTHORIZED!"
+                    });
+                }
+            }
+            else{
                 res.status(404).json({
                     message: "NO SUCH CAKE!"
                 })
             }
-            else{
-                res.status(200).json({
-                    message: `CAKE WITH ${id} SUCCESSFULLY DELETED`
-                })
-            }
         })
         .catch(err=>{
-            res.status(500)
+            res.status(500);
             next(err);
         })
-        
 });
 
 

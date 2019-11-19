@@ -3,5 +3,6 @@ export interface Cake {
     title: string,
     comment: string,
     image: string | File,
-    stars: boolean[], 
+    stars: boolean[],
+    creator: string; 
 }

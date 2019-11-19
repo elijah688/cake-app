@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 
 import { HttpErrorResponse, HttpClient } from '@angular/common/http';
-import { throwError, Observable } from 'rxjs';
+import { throwError, Observable, Subject, BehaviorSubject } from 'rxjs';
 import { User } from '../user.model';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
@@ -14,7 +14,8 @@ const BACKEND_URL:string = environment.apiUrl +'/auth';
 })
 export class AuthenticationService {
   private _timeout:ReturnType<typeof setTimeout>;
-
+  private _currentUserIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+   
   constructor(private http:HttpClient, private _router:Router) { }
 
   signUp(user: User):void {
@@ -28,14 +29,15 @@ export class AuthenticationService {
   }
 
   logIn(user:User):void{
-    this.http.post<{message:string, token:string}>(`${BACKEND_URL}/login`, user)
+    this.http.post<{message:string, token:string, userId:string}>(`${BACKEND_URL}/login`, user)
     .pipe(
       catchError(this.handleError)
     )
     .subscribe(res=>{
-      this.storeToken(res.token);
-      this._router.navigate(['/hub'])
+      this.storeToken(res.token, res.userId);
+      this._currentUserIdSubject.next(res.userId);
 
+      this._router.navigate(['/hub'])
     });
   }
 
@@ -43,13 +45,14 @@ export class AuthenticationService {
     return throwError(error);
   }
 
-  storeToken(token:string):void {
+  storeToken(token:string, userId:string):void {
     const nowDate = new Date()
     const nowTime = nowDate.getTime();
     const expirationTime = nowTime + 3600000;
 
     localStorage.setItem('token', token);
     localStorage.setItem('expirationTime', JSON.stringify(new Date(expirationTime)));
+    localStorage.setItem('currentUser', userId);
 
     this._timeout = setTimeout(()=>{
       this.logOut();
@@ -60,6 +63,7 @@ export class AuthenticationService {
   logOut():void{
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
+    localStorage.removeItem('currentUser');
 
     clearTimeout(this._timeout);
 
@@ -72,11 +76,18 @@ export class AuthenticationService {
     const now:number = new Date().getTime();
     const expiresIn:number = expirationTime - now;
 
+    const currentUser:string = localStorage.getItem('currentUser');
+
     if(token!==undefined && expirationTime!==undefined){
       this._timeout = setTimeout(() => {
         this.logOut();
       }, expiresIn);
+      this._currentUserIdSubject.next(currentUser);
     }
+  }
+
+  get currentUserIdSubject():Observable<string>{
+    return this._currentUserIdSubject.asObservable();
   }
 
 }

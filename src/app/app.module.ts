@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +23,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import { CakeHubComponent } from './cake/cake-hub/cake-hub.component';
 import { ActiveStarsPipe } from './cake/cake/pipes/active-stars.pipe';
 import { InactiveStarsPipe } from './cake/cake/pipes/inactive-stars.pipe';
+import { AuthorizationInterceptor } from './authorization/authorization.interceptor';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,13 @@ import { InactiveStarsPipe } from './cake/cake/pipes/inactive-stars.pipe';
     MatInputModule,
     MatDividerModule
   ],
-  providers: [],
+  providers: [
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthorizationInterceptor,
+    multi: true
+  }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

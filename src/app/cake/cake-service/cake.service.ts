@@ -25,23 +25,21 @@ export class CakeService {
   }
   
   addCake(cake: Cake): void {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': 'my-auth-token'
-      })
-    };
+   
     const title:string = cake.title;
     const comment:string = cake.comment;
     const image:File = <File>cake.image;
     const stars:string = JSON.stringify(cake.stars);
+    const creator:string = cake.creator;
 
     const cakeData = new FormData();
     cakeData.append("title", title);
     cakeData.append("comment", comment);
     cakeData.append("image", image, title);
     cakeData.append("stars", stars);
+    cakeData.append("creator", creator);
 
-    this.http.post<{message:string, cake:Cake}>(BACKEND_URL, cakeData, httpOptions)
+    this.http.post<{message:string, cake:Cake}>(BACKEND_URL, cakeData)
       .pipe(
         catchError(this.handleError)
       ).subscribe(res=>{
@@ -52,22 +50,20 @@ export class CakeService {
 
 
   editCake(cake:Cake):void{
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': 'my-auth-token'
-      })
-    };
     const id:string = cake.id;
     const title:string = cake.title;
     const comment:string = cake.comment;
     const image:File | string = cake.image;
     const stars:string = JSON.stringify(cake.stars);
+    const creator:string = cake.creator;
 
 
     const cakeData = new FormData();
     cakeData.append("title", title);
     cakeData.append("comment", comment);
     cakeData.append("stars", stars);
+    cakeData.append("creator", creator);
+
 
     if(typeof(image)==='string'){
       cakeData.append("image", image);
@@ -76,8 +72,6 @@ export class CakeService {
       cakeData.append("image", image, title);
     }
    
-
-
     this.http.put<{message:string}>(`${BACKEND_URL}/${id}`, cakeData)
       .pipe(
         catchError(this.handleError))
@@ -89,12 +83,8 @@ export class CakeService {
 
 
   deleteCake(id:string){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': 'my-auth-token'
-      })
-    };
-    this.http.delete<{message:string}>(`${BACKEND_URL}/${id}`, httpOptions)
+    
+    this.http.delete<{message:string}>(`${BACKEND_URL}/${id}`)
     .pipe(
       catchError(this.handleError)
     ).subscribe(res=>{

@@ -8,9 +8,6 @@ router.post('', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    console.log(email)
-    console.log(password)
-
     bcrypt.hash(password, 12)
         .then(hash=>{
             const user = new User({
@@ -40,7 +37,8 @@ router.post('/login', (req, res, next) => {
 
     User.findOne({email:email})
         .then(user=>{
-            bcrypt.compare(password, user.password)
+            if(user!==null){
+                bcrypt.compare(password, user.password)
                 .then(isAuth=>{
                     if(isAuth===true){
                         const id = user._id;
@@ -49,7 +47,8 @@ router.post('/login', (req, res, next) => {
                         
                         res.status(200).json({
                             message: "USER LOGGED IN!",
-                            token: token
+                            token: token,
+                            userId: user._id
                         })
                     }
                     else{
@@ -62,6 +61,13 @@ router.post('/login', (req, res, next) => {
                     res.status(500);
                     next(err);
                 })
+            }
+            else{
+                res.status(401).json({
+                    message:"YOU ARE UNAUTHORIZED!"
+                })
+            }
+            
         })
         .catch(err=>{
             res.status(500);

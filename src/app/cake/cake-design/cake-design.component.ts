@@ -15,6 +15,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
   public id:string;
   public stars:boolean[] = [false, false, false, false, false];
   public imgUrl:string;
+  public creator:string;
   public cakeForm = this.fb.group({
     title: ['',[Validators.required]],
     comment: ['',[Validators.required]],
@@ -82,7 +83,8 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
         title: title,
         comment: comment,
         image: file,
-        stars: this.stars
+        stars: this.stars,
+        creator: this.creator
       }
   
       this.cakeService.addCake(cake);
@@ -93,6 +95,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
       this.imageButtonTouched = false;
       this.cakeForm.reset();
       this.myform.resetForm();
+      this.creator = undefined;
     }
    
   }
@@ -103,16 +106,15 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     const comment: string = cake.comment;
     const imagePath: string | File = cake.image;
     const stars: boolean[] = cake.stars;
+    const creator:string = cake.creator;
 
     this.id = id;
     this.cakeForm.patchValue({title: title, comment: comment, image: imagePath});
     this.stars = stars;
     this.imgUrl = (imagePath as string);
+    this.creator = creator;
 
     this.isEditing = true;
-
-    console.log(this.id)
-
   }
 
   ngOnDestroy(){
@@ -134,7 +136,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
         image = imageForm;
       }
   
-      const cake:Cake = {id:id, title:title, comment:comment, image:image, stars:stars}
+      const cake:Cake = {id:id, title:title, comment:comment, image:image, stars:stars, creator:this.creator}
       this.cakeService.editCake(cake);
   
 
@@ -145,6 +147,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
       this.isEditing= false;
       this.cakeForm.reset();
       this.myform.resetForm();
+      this.creator = undefined;
     }
     
   }

@@ -26,8 +26,8 @@
     </mat-card-content>
 
     <mat-card-actions class="cake-card__actions">
-        <button (click)="editCake()" mat-stroked-button color='primary'>Edit</button>
-        <button (click)="deleteCake()" mat-stroked-button color='warn'>Delete</button>
+        <button *ngIf="creator===currentUserId" (click)="editCake()" mat-stroked-button color='primary'>Edit</button>
+        <button *ngIf="creator===currentUserId" (click)="deleteCake()" mat-stroked-button color='warn'>Delete</button>
     </mat-card-actions>
 
 </mat-card>
