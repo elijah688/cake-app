@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
+import { AuthenticationService } from '../authentication/authentication-service/authentication.service';
 
 
 @Component({
@@ -10,9 +11,12 @@ import { ViewEncapsulation } from '@angular/core';
 })
 export class NavigationComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService:AuthenticationService) { }
 
   ngOnInit() {
   }
 
+  logOut():void{
+    this.authService.logOut();
+  }
 }

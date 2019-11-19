@@ -1,7 +1,10 @@
-<mat-toolbar color="accent">
+<mat-toolbar class="navigation__main-toolbar"color="accent">
     <button mat-icon-button (click)="sidenav.toggle();">
         <mat-icon>menu</mat-icon>
     </button>
+    <div class="navigation__main-toolbar-controls">
+      <button mat-button (click)="logOut()">Log Out</button>
+    </div>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav__container">
@@ -17,7 +20,7 @@
 
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content class="sidenav__snav-content">
       <router-outlet></router-outlet>
   </mat-sidenav-content>
 

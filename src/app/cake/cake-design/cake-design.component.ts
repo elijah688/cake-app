@@ -4,6 +4,7 @@ import { CakeService } from '../cake-service/cake.service';
 import { Cake } from '../cake-model/cake.model';
 import { Subscription } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
+import { mimeType } from './validators/mime-type.validator';
 
 @Component({
   selector: 'app-cake-design',
@@ -17,7 +18,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
   public cakeForm = this.fb.group({
     title: ['',[Validators.required]],
     comment: ['',[Validators.required]],
-    image: [null, [Validators.required]]
+    image: [null, [Validators.required], [mimeType]]
   });
    
   @ViewChild('myForm', {static: false}) myform: NgForm;
@@ -35,10 +36,12 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     this.patchCakeSub = this.cakeService.patchCakeSubject.subscribe(cake=>{
      this.patchValuesOnEdit(cake);
     })
+
   }
 
 
   previewFile(event:Event):void {
+
     const file = (event.target as HTMLInputElement).files[0];
 
     if(file!==undefined){

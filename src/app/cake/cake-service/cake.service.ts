@@ -78,7 +78,7 @@ export class CakeService {
    
 
 
-    this.http.patch<{message:string}>(`${BACKEND_URL}/${id}`, cakeData)
+    this.http.put<{message:string}>(`${BACKEND_URL}/${id}`, cakeData)
       .pipe(
         catchError(this.handleError))
       .subscribe(res=>{
@@ -103,7 +103,7 @@ export class CakeService {
     });
   }
 
-  private handleError(error: HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse):Observable<HttpErrorResponse> {
     console.log(error.error);
     return throwError(error);
   }

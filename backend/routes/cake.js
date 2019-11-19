@@ -70,7 +70,7 @@ router.get('', (req, res,next) => {
         });
 })
 
-router.patch('/:id', extractFile,(req, res, next)=> {
+router.put('/:id', extractFile,(req, res, next)=> {
     if(req.multerError!==undefined){
         res.status(422);
         next(req.multerError);

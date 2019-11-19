@@ -70,6 +70,13 @@
                 </span> 
                 is required
             </mat-error>
+            <mat-error class="cake-design__form-image-upload--mime-type-error" *ngIf="cakeForm.get('image').hasError('invalidMimeType') && imageButtonTouched===true">
+                <span>
+                    <b>Cake</b>
+                    <i> image</i>
+                </span> 
+                should be a '.jgp', '.jpeg', '.png' or a '.gif' file.
+            </mat-error>
         </div>
         <button type="button" (click)="isEditing===true ? editCake() : addCake(); myForm.ngSubmit.emit()" mat-flat-button color='accent'>{{isEditing===true ? 'Edit Cake' : 'Add Cake'}}</button>
     </mat-card-actions>

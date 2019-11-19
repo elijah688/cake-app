@@ -24,12 +24,12 @@ app.use("/images", express.static(path.join(__dirname + "/images")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS, DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, OPTIONS, DELETE");
   next();
 });
 
 app.use("/api/cake", cakeRoutes);
-app.use("/api/user", authRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use((err, req, res, next) =>{
     console.log('ERROR==============================================================')
