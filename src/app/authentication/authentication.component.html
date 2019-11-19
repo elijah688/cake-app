@@ -12,7 +12,10 @@
 
         <mat-form-field class="authentication-card__content-input" appearance="outline">
             <mat-label>Username</mat-label>
-            <input formControlName="email" matInput placeholder="email@mail.com">
+            <input 
+            formControlName="email" 
+            matInput placeholder="email@mail.com"
+            [errorStateMatcher]="_errorStateMatcher">
             <mat-icon matSuffix>account_circle</mat-icon>
             <mat-hint>The email you signed up with.</mat-hint>
             <mat-error *ngIf="authForm.get('email').hasError('email') && !authForm.get('email').hasError('required')">
@@ -24,11 +27,20 @@
             <mat-error *ngIf="authForm.get('email').hasError('minlength') && !authForm.get('email').hasError('email') && !authForm.get('email').hasError('required') ">
                 You still need {{getRemainingCharacters('email')}} characters.
             </mat-error>
+            <mat-error *ngIf="authForm.get('email').hasError('emailTaken') && !authForm.get('email').hasError('minlength') && !authForm.get('email').hasError('email') && !authForm.get('email').hasError('required') ">
+                This username is taken.
+            </mat-error>
+            
         </mat-form-field>
 
         <mat-form-field class="authentication-card__content-input" appearance="outline">
             <mat-label>Pasword</mat-label>
-            <input formControlName="password" matInput placeholder="Password..."[type]="hidePassword ? 'password' : 'text'">
+            <input 
+            formControlName="password" 
+            matInput placeholder="Password..." 
+            [type]="hidePassword ? 'password' : 'text'"
+            [errorStateMatcher]="_errorStateMatcher">
+
             <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>

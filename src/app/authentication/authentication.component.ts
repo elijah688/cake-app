@@ -1,32 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { ViewEncapsulation } from '@angular/core';
 import { AuthenticationService } from './authentication-service/authentication.service';
 import { User } from './user.model';
+import { uniqueEmail } from './authentication-validators/unique-email.validator';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { MyErrorStateMatcher } from '../error-state-matcher/error-state-matcher';
 
 @Component({
-  //encapsulation: ViewEncapsulation.None,
   selector: 'app-authentication',
   templateUrl: './authentication.component.html',
   styleUrls: ['./authentication.component.sass']
 })
-export class AuthenticationComponent implements OnInit {
+export class AuthenticationComponent implements OnInit, OnDestroy {
 
   public authModeLogin = true;
   public hidePassword = true;
-  constructor(private fb: FormBuilder, private authService:AuthenticationService) { }
+  private _authModeLoginSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private _authModeLoginSubjectSubscription:Subscription = new Subscription();
+  private _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
 
-  authForm = this.fb.group({
+  public authForm = this.fb.group({
     email: ['', [Validators.email, Validators.required, Validators.minLength(6)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
+  constructor(
+    private fb: FormBuilder, 
+    private authService:AuthenticationService) { }
+
   ngOnInit() {
+   this._authModeLoginSubjectSubscription =  this._authModeLoginSubject.subscribe(isLogin=>{
+    this.handleEmailValidators(isLogin);
+    })
   }
 
-
+ 
   toggleAuthMode():void{
     this.authModeLogin = !this.authModeLogin;
+    this._authModeLoginSubject.next(this.authModeLogin);
   }
 
   getRemainingCharacters(formControlName:string):number {
@@ -59,6 +70,21 @@ export class AuthenticationComponent implements OnInit {
     else{
       this.authService.signUp(user);
     }
+  }
+
+  handleEmailValidators(isLogin:boolean){
+    if(isLogin===true){
+      this.authForm.get("email").clearAsyncValidators();
+    }
+    else{
+      this.authForm.get("email").setAsyncValidators(uniqueEmail(this.authService));
+    }
+    this.authForm.get("email").updateValueAndValidity();
+    console.log(this.authForm.get('email').errors)
+  }
+
+  ngOnDestroy(){
+    this._authModeLoginSubjectSubscription.unsubscribe();
   }
 
 }

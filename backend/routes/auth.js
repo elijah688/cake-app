@@ -76,6 +76,27 @@ router.post('/login', (req, res, next) => {
 
 });
 
+router.get('/emailUnique/:email', (req, res, next) => {
+    const email = req.params.email
+    User.findOne({email:email})
+        .then(user=>{
+            if(user){
+                res.status(200).json({
+                    isUnique:false
+                })
+            }
+            else{
+                res.status(200).json({
+                    isUnique:true
+                })
+                console.log(true);
+            }
+        })
+        .catch(err=>{
+            res.status()
+            next(err);
+        })
+});
 
 
 module.exports = router;

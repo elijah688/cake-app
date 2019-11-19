@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 
-import { HttpErrorResponse, HttpClient } from '@angular/common/http';
-import { throwError, Observable, Subject, BehaviorSubject } from 'rxjs';
+import { HttpErrorResponse, HttpClient, HttpParams } from '@angular/common/http';
+import { throwError, Observable, Subject, BehaviorSubject, of } from 'rxjs';
 import { User } from '../user.model';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
@@ -89,5 +89,14 @@ export class AuthenticationService {
   get currentUserIdSubject():Observable<string>{
     return this._currentUserIdSubject.asObservable();
   }
+
+  isEmailUnique(controlValue:string):Observable<{isUnique:boolean}> {
+    const email:string = controlValue;
+
+    return this.http.get<{isUnique:boolean}>(`${BACKEND_URL}/emailUnique/${email}`)
+      .pipe(
+        catchError(this.handleError)
+      )
+    }
 
 }
