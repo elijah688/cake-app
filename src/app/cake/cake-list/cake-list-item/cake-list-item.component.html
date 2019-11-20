@@ -1,0 +1,19 @@
+<mat-card class="cake-card">
+        <mat-card-header class="cake-card__header">
+    
+            <mat-card-title class="cake-card__header--title">
+                <h3>
+                    {{title}}
+                </h3>
+            </mat-card-title>
+    
+        </mat-card-header>
+    
+        <img class="cake-card__image" mat-card-image [src]="imagePath" [alt]="title">
+
+    
+        <mat-card-actions class="cake-card__actions">
+            <button  (click)="deteils()" mat-stroked-button color='primary'>Details</button>
+        </mat-card-actions>
+    
+    </mat-card>

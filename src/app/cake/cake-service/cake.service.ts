@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { HttpHeaders } from '@angular/common/http';
 import { Cake } from '../cake-model/cake.model';
 import { CakeSocketService } from '../cake-socket-service/cake-socket.service';
+import { Router } from '@angular/router';
 
 const BACKEND_URL:string = environment.apiUrl +'/cake';
 
@@ -20,12 +21,12 @@ export interface PageOptions {
 export class CakeService {
 
   private _cakesSubject:Subject<{cakes:Cake[],count:number}> = new Subject<{cakes:Cake[],count:number}>();
-  private _patchCakeSubject:Subject<Cake> = new Subject<Cake>();
+  private _patchCakeSubject:BehaviorSubject<Cake> = new BehaviorSubject<Cake>(null);
   
   private _pageOptionsSubject:BehaviorSubject<PageOptions> = new BehaviorSubject<PageOptions>({currentPage:1,pageSize:2});
   private _loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private _router:Router) { }
 
   getCakes(): void {
     this._loadingSubject.next(true);
@@ -93,6 +94,7 @@ export class CakeService {
         catchError(this.handleError))
       .subscribe(res=>{
         console.log(res.message)
+        this._router.navigate(['/list']);
         this.getCakes();
       });
   }

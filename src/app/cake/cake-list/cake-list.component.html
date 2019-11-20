@@ -1,21 +1,29 @@
 
 <app-spinner *ngIf="loading===true" class='cake-list__spinner'></app-spinner>
-<ul *ngIf="loading===false" class="cake-list__list">
-    <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
-        <app-cake 
-            [title]="cake.title"
-            [imagePath]="cake.imagePath" 
-            [comment]="cake.comment"
-            [stars]="cake.stars"
-            [id]="cake.id"
-            [creator]="cake.creator"
-        >
-        </app-cake>
-    </li>
-</ul>
-<mat-paginator class="cake-list__paginator" 
-    [length]="length"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="pageSizeOptions"
-    (page)="setPaginatorOptions($event)">
-</mat-paginator>
+<div class="cake-list-container">
+    <ul *ngIf="loading===false" class="cake-list__list">
+            <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
+                <app-cake-list-item
+                    [id]="cake.id"
+                    [title]="cake.title" 
+                    [imagePath]="cake.imagePath">
+                </app-cake-list-item>
+                <!-- <app-cake 
+                    [title]="cake.title"
+                    [imagePath]="cake.imagePath" 
+                    [comment]="cake.comment"
+                    [stars]="cake.stars"
+                    [id]="cake.id"
+                    [creator]="cake.creator"
+                >
+                </app-cake> -->
+                
+            </li>
+        </ul>
+        <mat-paginator class="cake-list__paginator" 
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            (page)="setPaginatorOptions($event)">
+        </mat-paginator>
+</div>

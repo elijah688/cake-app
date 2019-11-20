@@ -32,6 +32,7 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
 import { AuthenticationDialogComponent } from './authentication/authentication-dialog/authentication-dialog.component';
 import { ErrorDialogComponent } from './error/error-dialog/error-dialog.component';
 import { ErrorInterceptor } from './error/error-interceptor.service';
+import { CakeListItemComponent } from './cake/cake-list/cake-list-item/cake-list-item.component';
 
 
 
@@ -49,7 +50,8 @@ import { ErrorInterceptor } from './error/error-interceptor.service';
     SpinnerComponent,
     SnackbarComponent,
     AuthenticationDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    CakeListItemComponent
   ],
   entryComponents: [
     SnackbarComponent,

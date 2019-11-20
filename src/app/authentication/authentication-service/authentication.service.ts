@@ -21,6 +21,7 @@ export class AuthenticationService {
   private _currentUserIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   private _loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _emailPatchSubject: Subject<string> = new Subject<string>();
+  private _isLoggedIn:boolean = false;
 
   constructor(
     private http:HttpClient, 
@@ -54,9 +55,10 @@ export class AuthenticationService {
     .subscribe(res=>{
       this.storeToken(res.token, res.userId);
       this._currentUserIdSubject.next(res.userId);
+      this._isLoggedIn = true;
       
       this._loadingSubject.next(false);
-      this._router.navigate(['/hub'])
+      this._router.navigate(['/list'])
 
       this._snack.openFromComponent(SnackbarComponent, {
         duration: 3000,
@@ -91,6 +93,8 @@ export class AuthenticationService {
 
     clearTimeout(this._timeout);
 
+    this._isLoggedIn = false;
+
     this._router.navigate(['/auth']);
   }
 
@@ -107,6 +111,7 @@ export class AuthenticationService {
         this.logOut();
       }, expiresIn);
       this._currentUserIdSubject.next(currentUser);
+      this._isLoggedIn = true;
     }
   }
 
@@ -131,4 +136,8 @@ export class AuthenticationService {
       return this._emailPatchSubject.asObservable();
     }
 
+
+    get isLoggedIn():boolean{
+      return this._isLoggedIn;
+    }
 }

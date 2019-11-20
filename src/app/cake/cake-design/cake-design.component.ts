@@ -35,6 +35,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.patchCakeSub = this.cakeService.patchCakeSubject.subscribe(cake=>{
      this.patchValuesOnEdit(cake);
+     console.log(cake);
     })
 
    
