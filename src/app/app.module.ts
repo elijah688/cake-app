@@ -15,6 +15,7 @@ import { CakeHubComponent } from './cake/cake-hub/cake-hub.component';
 import { ActiveStarsPipe } from './cake/cake/pipes/active-stars.pipe';
 import { InactiveStarsPipe } from './cake/cake/pipes/inactive-stars.pipe';
 import { AuthorizationInterceptor } from './authorization/authorization.interceptor';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -25,6 +26,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDialogModule} from '@angular/material/dialog';
+import { SnackbarComponent } from './snackbar/snackbar.component';
+import { AuthenticationDialogComponent } from './authentication/authentication-dialog/authentication-dialog.component';
+import { ErrorDialogComponent } from './error/error-dialog/error-dialog.component';
+import { ErrorInterceptor } from './error/error-interceptor.service';
+
 
 
 @NgModule({
@@ -37,7 +45,16 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     CakeComponent,
     CakeHubComponent,
     ActiveStarsPipe,
-    InactiveStarsPipe
+    InactiveStarsPipe,
+    SpinnerComponent,
+    SnackbarComponent,
+    AuthenticationDialogComponent,
+    ErrorDialogComponent
+  ],
+  entryComponents: [
+    SnackbarComponent,
+    AuthenticationDialogComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -54,12 +71,19 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatFormFieldModule,
     MatInputModule,
     MatDividerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [
     {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthorizationInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorInterceptor,
     multi: true
   }
 ],

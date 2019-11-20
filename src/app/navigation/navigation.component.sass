@@ -3,7 +3,7 @@
   justify-content: space-between
   align-items: center
   .navigation__main-toolbar-controls
-    
+    display: none
   
 .sidenav__container
   width: 100%
@@ -17,14 +17,26 @@
       height: 40%
       display: flex
       flex-direction: column
-      justify-content: space-around
+      justify-content: center
       align-items: center
       button
       color: white
       width: 50%
   .sidenav__snav-content
+    background: url('/assets/cakes.jpg')
+    background-size: contain
     height: 90.5vh
 
 
 .mat-drawer-backdrop.mat-drawer-shown
     background-color: rgba(0.5,0.5,0.5,0.4)
+
+
+@media only screen and (min-width: 40rem)
+  .navigation__main-toolbar
+    justify-content: flex-end
+    .mat-icon-button
+        display: none
+    .navigation__main-toolbar-controls
+      display: flex
+      

@@ -6,6 +6,10 @@ import { throwError, Observable, Subject, BehaviorSubject, of } from 'rxjs';
 import { User } from '../user.model';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { MatSnackBarRef, MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationDialogComponent } from '../authentication-dialog/authentication-dialog.component';
 
 const BACKEND_URL:string = environment.apiUrl +'/auth';
 
@@ -15,8 +19,14 @@ const BACKEND_URL:string = environment.apiUrl +'/auth';
 export class AuthenticationService {
   private _timeout:ReturnType<typeof setTimeout>;
   private _currentUserIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-   
-  constructor(private http:HttpClient, private _router:Router) { }
+  private _loadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _emailPatchSubject: Subject<string> = new Subject<string>();
+
+  constructor(
+    private http:HttpClient, 
+    private _router:Router, 
+    private _snack:MatSnackBar,
+    private _signUpDialog:MatDialog) { }
 
   signUp(user: User):void {
     this.http.post<{message:string}>(BACKEND_URL, user)
@@ -24,6 +34,14 @@ export class AuthenticationService {
         catchError(this.handleError)
       )
       .subscribe(res=>{
+        this._signUpDialog.open(AuthenticationDialogComponent,{
+          height: '12.69rem',
+          width: '17.06rem',
+          data: user.email,
+          panelClass: 'auth-dialog'
+        })
+        this._emailPatchSubject.next(user.email);  
+        this._loadingSubject.next(false);
         console.log(res.message);
       });
   }
@@ -36,8 +54,14 @@ export class AuthenticationService {
     .subscribe(res=>{
       this.storeToken(res.token, res.userId);
       this._currentUserIdSubject.next(res.userId);
-
+      
+      this._loadingSubject.next(false);
       this._router.navigate(['/hub'])
+
+      this._snack.openFromComponent(SnackbarComponent, {
+        duration: 3000,
+        panelClass: "modal-pink"
+      })
     });
   }
 
@@ -97,6 +121,14 @@ export class AuthenticationService {
       .pipe(
         catchError(this.handleError)
       )
+    }
+
+    get loadingSubject():Subject<boolean>{
+      return this._loadingSubject;
+    }
+
+    get emailPatchSubject():Observable<string>{
+      return this._emailPatchSubject.asObservable();
     }
 
 }

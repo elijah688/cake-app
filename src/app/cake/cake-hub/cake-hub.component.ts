@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { CakeService } from '../cake-service/cake.service';
 
 @Component({
   selector: 'app-cake-hub',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cake-hub.component.sass']
 })
 export class CakeHubComponent implements OnInit {
+ 
 
-  constructor() { }
+  constructor(private cakeService:CakeService) { }
 
-  ngOnInit() {
+  ngOnInit():void {
   }
 
+ 
+
+ 
 }

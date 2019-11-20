@@ -1,0 +1,10 @@
+<div class="auth-dialog">
+    <h1 mat-dialog-title>Hi there, {{data.name}}</h1>
+    <mat-icon>cake</mat-icon>
+    <div mat-dialog-content>
+        <span> <i>Your Cake Factory username is: </i> <b>{{data}}</b></span>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-mini-fab color="primary" [mat-dialog-close]="data" cdkFocusInitial>OK</button>
+    </div>
+</div>

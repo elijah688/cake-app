@@ -1,4 +1,6 @@
-<ul class="cake-list__list">
+
+<app-spinner *ngIf="loading===true" class='cake-list__spinner'></app-spinner>
+<ul *ngIf="loading===false" class="cake-list__list">
     <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
         <app-cake 
             [title]="cake.title"

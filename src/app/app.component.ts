@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from './authentication/authentication-service/authentication.service';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
@@ -9,12 +9,12 @@ import { AuthenticationService } from './authentication/authentication-service/a
 export class AppComponent implements OnInit {
   title = 'cakes';
 
-  constructor(private _authService:AuthenticationService){
+  constructor(){
 
   }
 
   ngOnInit():void{
-    this._authService.autoLogin();
+   
   }
 
 }

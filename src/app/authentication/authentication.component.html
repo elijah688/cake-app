@@ -1,5 +1,5 @@
-<mat-card class="authentication-card">
-
+<app-spinner class="authentication-spinner" *ngIf='loading===true'></app-spinner>
+<mat-card *ngIf='loading===false' class="authentication-card">
     <mat-card-header class="authentication-card__headder">
         <mat-card-title class="authentication-card__headder-title">
             {{ authModeLogin===true ? "LOGIN" : "SIGN UP"}}
@@ -8,8 +8,8 @@
 
     <mat-card-content class="authentication-card__content">
 
-      <form #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate()">
-
+      <form class="authentication-card__form" #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate()">
+        <button class="authentication-card__form--secret-submit" #secretSubmit type='submit'></button>
         <mat-form-field class="authentication-card__content-input" appearance="outline">
             <mat-label>Username</mat-label>
             <input 
@@ -57,7 +57,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-        <button (click)="myForm.ngSubmit.emit()" mat-flat-button color="accent">{{ authModeLogin===true ? "Login" : "Sign Up"}}</button>
+        <button (click)="secretSubmit.click()" mat-flat-button color="accent">{{ authModeLogin===true ? "Login" : "Sign Up"}}</button>
     </mat-card-actions>
 
     <mat-card-footer>

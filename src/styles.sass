@@ -4,5 +4,37 @@
     box-sizing: border-box
 html
     body
-        margin: 0
-        padding: 0
+      margin: 0
+      padding: 0
+
+
+::-webkit-scrollbar
+  width: 10px
+
+::-webkit-scrollbar-track
+  background: #fde5eb
+
+::-webkit-scrollbar-thumb
+  background: #A60C31
+
+  &:hover
+    background: #f15780
+
+
+.modal-pink
+  background: #F15780
+
+.auth-dialog, .err-dialog
+  color: white
+  text-align: center
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  .mat-dialog-container
+    overflow: hidden
+    border-radius: 1rem
+    background-color: #F15780
+
+
+  

@@ -17,7 +17,10 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   public hidePassword = true;
   private _authModeLoginSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private _authModeLoginSubjectSubscription:Subscription = new Subscription();
+  private _patchEmailSub:Subscription = new Subscription();
   private _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
+  loading:boolean = false; 
+  loadingSubscription:Subscription = new Subscription();
 
   public authForm = this.fb.group({
     email: ['', [Validators.email, Validators.required, Validators.minLength(6)]],
@@ -29,9 +32,20 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     private authService:AuthenticationService) { }
 
   ngOnInit() {
-   this._authModeLoginSubjectSubscription =  this._authModeLoginSubject.subscribe(isLogin=>{
+   this._authModeLoginSubjectSubscription = this._authModeLoginSubject.subscribe(isLogin=>{
     this.handleEmailValidators(isLogin);
     })
+
+    this.loadingSubscription = this.authService.loadingSubject.subscribe(loading=>{
+      this.loading = loading;
+      console.log(this.loading)
+    })
+
+    this._patchEmailSub = this.authService.emailPatchSubject.subscribe(email=>{
+      this.authForm.get("email").patchValue(email);
+      this.authForm.get("email").updateValueAndValidity();
+    })
+
   }
 
  
@@ -56,19 +70,22 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   authenticate():void{
-    const email = this.authForm.get('email').value;
-    const password = this.authForm.get('password').value;
-
-    const user:User = {
-      email:email,
-      password:password
-    }
-
-    if(this.authModeLogin===true){
-      this.authService.logIn(user);
-    }
-    else{
-      this.authService.signUp(user);
+    this.loading = true;
+    if(this.authForm.valid){
+      const email = this.authForm.get('email').value;
+      const password = this.authForm.get('password').value;
+  
+      const user:User = {
+        email:email,
+        password:password
+      }
+  
+      if(this.authModeLogin===true){
+        this.authService.logIn(user);
+      }
+      else{
+        this.authService.signUp(user);
+      }
     }
   }
 
@@ -85,6 +102,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this._authModeLoginSubjectSubscription.unsubscribe();
+    this.loadingSubscription.unsubscribe();
   }
 
 }

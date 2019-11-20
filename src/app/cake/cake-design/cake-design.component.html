@@ -1,12 +1,12 @@
 <mat-card class="cake-design__card">
     <mat-card-header class="cake-design__card-header">
         <mat-card-title class="cake-design__card-title">
-            Build Cake
+            {{isEditing===true ? 'Edit Cake' : 'Add Cake'}}
         </mat-card-title>
     </mat-card-header>
     <mat-card-content class="cake-design__card-content">
 
-        <form #myForm="ngForm" [formGroup]="cakeForm" (ngSubmit)="isEditing==true ? addCake() : editCake()" class="cake-design__form">
+        <form #myForm="ngForm" [formGroup]="cakeForm" (ngSubmit)="isEditing==true ? addCake() : editCake(); myForm.resetForm()" class="cake-design__form">
 
             <mat-form-field color="accent" class="cake-design__form-title">
                 <mat-label>
@@ -14,14 +14,20 @@
                     <b> Cake</b> 
                     <i> title</i>
                 </mat-label>
-                <input formControlName="title" matInput placeholder="Super Tasty Cake" (focus)="titleIcon.color='accent'" (blur)="titleIcon.color='none'">
+                <input 
+                    formControlName="title" 
+                    matInput placeholder="Super Tasty Cake" 
+                    (focus)="titleIcon.color='accent'" 
+                    (blur)="titleIcon.color='none'"
+                    [errorStateMatcher]="_errorStateMatcher">
+                    
                 <mat-icon #titleIcon matSuffix>cake</mat-icon>
                 <mat-error *ngIf="cakeForm.get('title').hasError('required')">
                      <span>
                         <b>Cake</b>
                         <i> title</i>
                       </span> 
-                      is required!
+                      is required! 
                 </mat-error>
             </mat-form-field>
 
@@ -31,15 +37,23 @@
                     <b> Cake</b> 
                     <i> comment</i>
                 </mat-label>
-                <textarea cols="30" rows="5" formControlName="comment" matInput placeholder="My fave, delicious!" (focus)="commentIcon.color='accent'" (blur)="commentIcon.color='none'"></textarea>
+                <textarea 
+                    cols="30" 
+                    rows="5" 
+                    formControlName="comment" 
+                    matInput placeholder="My fave, delicious!" 
+                    (focus)="commentIcon.color='accent'" 
+                    (blur)="commentIcon.color='none'"
+                    [errorStateMatcher]="_errorStateMatcher ">
+                    </textarea>
                 <mat-icon #commentIcon matSuffix>comment</mat-icon>
                 <mat-error *ngIf="cakeForm.get('comment').hasError('required')">
-                        <span>
-                           <b>Cake</b>
-                           <i> comment</i>
-                         </span> 
-                         is required!
-                   </mat-error>
+                    <span>
+                        <b>Cake</b>
+                        <i> comment</i>
+                        </span> 
+                        is required!
+                </mat-error>
             </mat-form-field>
 
 
@@ -51,8 +65,9 @@
             <div class="cake-design__form-stars">
                 <mat-icon class="cake-design__form-stars--icon" color="{{stars[i]===true ? 'accent' : 'none'}}" (click)="toggleStar(i)" *ngFor="let star of stars; let i = index">{{stars[i]===true ? 'star' : 'star_border'}}</mat-icon> 
             </div>
+            
             <mat-divider [inset]="true"></mat-divider>
-
+            <button #secretSubmit type="submit" class="cake-design__form--secret-submit-button"></button>
         </form>
 
     </mat-card-content>
@@ -61,16 +76,16 @@
     <mat-card-actions class="cake-design__card-controls">
 
         <div class="cake-design__form-image-upload">
-            <button (click)="input.click(); imageButtonTouched=true" class="cake-design__form-image-upload__button" mat-stroked-button color="accent">Upload Image</button>
+            <button (click)="input.click();" class="cake-design__form-image-upload__button" mat-stroked-button color="accent">Upload Image</button>
             <input (change)="previewFile($event)" #input class="cake-design__form-image-upload__input" type="file">
-            <mat-error *ngIf="cakeForm.get('image').hasError('required') && imageButtonTouched===true">
+            <mat-error *ngIf="myForm.submitted && cakeForm.get('image').value===null">
                 <span>
                     <b>Cake</b>
                     <i> image</i>
                 </span> 
                 is required
             </mat-error>
-            <mat-error class="cake-design__form-image-upload--mime-type-error" *ngIf="cakeForm.get('image').hasError('invalidMimeType') && imageButtonTouched===true">
+            <mat-error class="cake-design__form-image-upload--mime-type-error" *ngIf="cakeForm.get('image').hasError('invalidMimeType')">
                 <span>
                     <b>Cake</b>
                     <i> image</i>
@@ -78,7 +93,7 @@
                 should be a '.jgp', '.jpeg', '.png' or a '.gif' file.
             </mat-error>
         </div>
-        <button type="button" (click)="isEditing===true ? editCake() : addCake(); myForm.ngSubmit.emit()" mat-flat-button color='accent'>{{isEditing===true ? 'Edit Cake' : 'Add Cake'}}</button>
+        <button type="submit" (click)="isEditing===true ? editCake() : addCake(); secretSubmit.click();" mat-flat-button color='accent'>{{isEditing===true ? 'Edit Cake' : 'Add Cake'}}</button>
     </mat-card-actions>
 </mat-card>
 

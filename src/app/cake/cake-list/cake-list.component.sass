@@ -1,9 +1,35 @@
+.cake-list__spinner
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 60%
+    width: 100%
 .cake-list__list
     list-style-type: none
     padding: 0
 
 .cake-list__paginator
+    background-color: rgb(241,87,128)
+    position: fixed
+    bottom: 0%
+    left: 50%
+    width: 50%
     .mat-paginator-container
+        color: white
         display: flex
         justify-content: center
         align-items: center
+    .mat-select-value
+        color: white
+    .mat-select-arrow 
+        color: white
+    .mat-form-field-infix 
+        border-bottom: 0.05rem solid white
+
+
+
+
+@media only screen and (max-width: 40rem)
+    .cake-list__paginator
+        position: static
+        width: 100%

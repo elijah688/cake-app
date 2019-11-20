@@ -5,6 +5,7 @@ import { Cake } from '../cake-model/cake.model';
 import { Subscription } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
 import { mimeType } from './validators/mime-type.validator';
+import { MyErrorStateMatcher } from 'src/app/error-state-matcher/error-state-matcher';
 
 @Component({
   selector: 'app-cake-design',
@@ -13,7 +14,7 @@ import { mimeType } from './validators/mime-type.validator';
 })
 export class CakeDesignComponent implements OnInit, OnDestroy {
   public id:string;
-  public stars:boolean[] = [false, false, false, false, false];
+  public stars:boolean[] = [true, false, false, false, false];
   public imgUrl:string;
   public creator:string;
   public cakeForm = this.fb.group({
@@ -22,11 +23,9 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     image: [null, [Validators.required], [mimeType]]
   });
    
-  @ViewChild('myForm', {static: false}) myform: NgForm;
-
   public isEditing: boolean = false;
   public patchCakeSub:Subscription = new Subscription();
-  public imageButtonTouched:boolean = false;
+  private _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +37,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
      this.patchValuesOnEdit(cake);
     })
 
+   
   }
 
 
@@ -60,9 +60,6 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
 
   toggleStar(index:number):void{
-    if(index===0 && this.stars[1]===false){
-      this.stars[0] = !this.stars[0];
-    }
     if(index!==0 && this.stars[index-1]===true && this.stars[index+1]===false){
       this.stars[index] = !this.stars[index];
     }
@@ -91,10 +88,8 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
       this.id = undefined;
       this.imgUrl = undefined;
-      this.stars = Array(5).fill(false);;
-      this.imageButtonTouched = false;
+      this.stars = [true,false,false,false,false];
       this.cakeForm.reset();
-      this.myform.resetForm();
       this.creator = undefined;
     }
    
@@ -142,11 +137,9 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
       this.id = undefined;
       this.imgUrl = undefined;
-      this.stars = Array(5).fill(false);
-      this.imageButtonTouched = false;
+      this.stars = [true,false,false,false,false];
       this.isEditing= false;
       this.cakeForm.reset();
-      this.myform.resetForm();
       this.creator = undefined;
     }
     
