@@ -102,7 +102,8 @@ export class AuthenticationService {
 
     const currentUser:string = localStorage.getItem('currentUser');
 
-    if(token!==undefined && expirationTime!==undefined){
+
+    if(token!==null && expirationTime!==null){
       this._timeout = setTimeout(() => {
         this.logOut();
       }, expiresIn);

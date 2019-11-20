@@ -38,7 +38,6 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
     this.loadingSubscription = this.authService.loadingSubject.subscribe(loading=>{
       this.loading = loading;
-      console.log(this.loading)
     })
 
     this._patchEmailSub = this.authService.emailPatchSubject.subscribe(email=>{
@@ -97,7 +96,6 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
       this.authForm.get("email").setAsyncValidators(uniqueEmail(this.authService));
     }
     this.authForm.get("email").updateValueAndValidity();
-    console.log(this.authForm.get('email').errors)
   }
 
   ngOnDestroy(){

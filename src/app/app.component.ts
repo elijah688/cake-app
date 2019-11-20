@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AuthenticationService } from './authentication/authentication-service/authentication.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -9,12 +10,12 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'cakes';
 
-  constructor(){
+  constructor(private authSev:AuthenticationService){
 
   }
 
   ngOnInit():void{
-   
+    this.authSev.autoLogin();
   }
 
 }

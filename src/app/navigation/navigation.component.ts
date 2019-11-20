@@ -10,16 +10,19 @@ import { AuthenticationService } from '../authentication/authentication-service/
   styleUrls: ['./navigation.component.sass']
 })
 export class NavigationComponent implements OnInit {
-  private _logoutVisible:boolean = true;
+  private _logoutVisible:boolean = false;
 
   constructor(private authService:AuthenticationService) { }
 
   ngOnInit() {
-    // this.authService.currentUserIdSubject.subscribe(res=>{
-    //   if(res===null){
-    //     this._logoutVisible = false;
-    //   }
-    // })
+    this.authService.currentUserIdSubject.subscribe(res=>{
+      if(res===null){
+        this._logoutVisible = false;
+      }
+      else{
+        this._logoutVisible = true;
+      }
+    })
   }
 
   logOut():void{
