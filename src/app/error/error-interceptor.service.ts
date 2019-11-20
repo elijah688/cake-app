@@ -22,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   handleError(error: HttpErrorResponse, dialog:MatDialog):Observable<HttpEvent<HttpErrorResponse>>{
     let errorMessage:string;
     if(error.status===401){
-      errorMessage="You're Unauthorized!"
+      errorMessage="Your credentials are wrong!"
     }
     else{
       errorMessage="Something bad happened!"

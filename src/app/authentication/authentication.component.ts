@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { uniqueEmail } from './authentication-validators/unique-email.validator';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MyErrorStateMatcher } from '../error-state-matcher/error-state-matcher';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-authentication',
@@ -33,7 +34,11 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
    this._authModeLoginSubjectSubscription = this._authModeLoginSubject.subscribe(isLogin=>{
-    this.handleEmailValidators(isLogin);
+    this.authModeLogin = isLogin;
+    this.handleEmailValidators();
+
+    this.authForm.valueChanges.subscribe(res=>{
+    })
     })
 
     this.loadingSubscription = this.authService.loadingSubject.subscribe(loading=>{
@@ -47,10 +52,9 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   }
 
- 
+
   toggleAuthMode():void{
-    this.authModeLogin = !this.authModeLogin;
-    this._authModeLoginSubject.next(this.authModeLogin);
+    this._authModeLoginSubject.next(!this.authModeLogin);
   }
 
   getRemainingCharacters(formControlName:string):number {
@@ -69,8 +73,8 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   authenticate():void{
-    this.loading = true;
     if(this.authForm.valid){
+      this.loading = true;
       const email = this.authForm.get('email').value;
       const password = this.authForm.get('password').value;
   
@@ -85,11 +89,14 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
       else{
         this.authService.signUp(user);
       }
+
+      this.authForm.reset();
+      this._authModeLoginSubject.next(true);
     }
   }
 
-  handleEmailValidators(isLogin:boolean){
-    if(isLogin===true){
+  handleEmailValidators(){
+    if(this.authModeLogin===true){
       this.authForm.get("email").clearAsyncValidators();
     }
     else{

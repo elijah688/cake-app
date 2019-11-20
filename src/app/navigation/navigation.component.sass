@@ -1,4 +1,8 @@
 .navigation__main-toolbar
+  position: relative
+  top: 0
+  left: 0
+  z-index: 500
   display: flex
   justify-content: space-between
   align-items: center
@@ -25,8 +29,7 @@
   .sidenav__snav-content
     background: url('/assets/cakes.jpg')
     background-size: contain
-    height: 90.5vh
-
+    height: 100vh
 
 .mat-drawer-backdrop.mat-drawer-shown
     background-color: rgba(0.5,0.5,0.5,0.4)
@@ -39,4 +42,10 @@
         display: none
     .navigation__main-toolbar-controls
       display: flex
-      
+
+
+@media only screen and (max-height: 43.75rem)
+  .sidenav__container
+    .sidenav__snav-content
+      height: 90.5vh
+

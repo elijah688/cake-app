@@ -8,7 +8,7 @@
 
     <mat-card-content class="authentication-card__content">
 
-      <form class="authentication-card__form" #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate()">
+      <form class="authentication-card__form" #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate();">
         <button class="authentication-card__form--secret-submit" #secretSubmit type='submit'></button>
         <mat-form-field class="authentication-card__content-input" appearance="outline">
             <mat-label>Username</mat-label>
