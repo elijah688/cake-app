@@ -1,0 +1,51 @@
+.navigation__main-toolbar
+  position: relative
+  top: 0
+  left: 0
+  z-index: 500
+  display: flex
+  justify-content: space-between
+  align-items: center
+  .navigation__main-toolbar-controls
+    display: none
+  
+.sidenav__container
+  width: 100%
+  .sidenav__snav
+    width: 33%
+    background-color: rgba(241,87,128,0.4)
+    align-items: center
+    .sidenav__buttons
+      margin: 1rem auto
+      width: 100%
+      height: 40%
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      button
+      color: white
+      width: 50%
+  .sidenav__snav-content
+    background: url('/assets/cakes.jpg')
+    background-size: contain
+    height: 100vh
+
+.mat-drawer-backdrop.mat-drawer-shown
+    background-color: rgba(0.5,0.5,0.5,0.4)
+
+
+@media only screen and (min-width: 40rem)
+  .navigation__main-toolbar
+    justify-content: flex-end
+    .mat-icon-button
+        display: none
+    .navigation__main-toolbar-controls
+      display: flex
+
+
+@media only screen and (max-height: 43.75rem)
+  .sidenav__container
+    .sidenav__snav-content
+      height: 90.5vh
+

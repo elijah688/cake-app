@@ -1,0 +1,33 @@
+<mat-card class="cake-card">
+    <mat-card-header class="cake-card__header">
+
+        <mat-card-title class="cake-card__header--title">
+            <h3>
+                {{title}}
+            </h3>
+        </mat-card-title>
+
+        <mat-card-subtitle class="cake-card__header--subtitle">        
+            <mat-icon class="cake-card__header--subtitle-stars" *ngFor="let star of (stars | active)">star</mat-icon>
+            <mat-icon class="cake-card__header--subtitle-stars--empty" *ngFor="let star of (stars | inactive)">star_border</mat-icon>
+
+        </mat-card-subtitle>
+
+    </mat-card-header>
+
+    <img class="cake-card__image" mat-card-image [src]="imagePath" [alt]="title">
+    
+    <mat-card-content class="cake-card__content">
+        <mat-divider [inset]="true"></mat-divider>
+        <p>
+           {{comment}}
+        </p>
+        <mat-divider [inset]="true"></mat-divider>
+    </mat-card-content>
+
+    <mat-card-actions class="cake-card__actions">
+        <button *ngIf="creator===currentUserId" (click)="editCake()" [routerLink]="['/design']" mat-stroked-button color='primary'>Edit</button>
+        <button *ngIf="creator===currentUserId" (click)="deleteCake()" mat-stroked-button color='warn'>Delete</button>
+    </mat-card-actions>
+
+</mat-card>

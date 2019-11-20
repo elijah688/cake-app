@@ -1,0 +1,26 @@
+<mat-toolbar class="navigation__main-toolbar"color="accent">
+    <button mat-icon-button class="navigation__main-toolbar--hamburger" (click)="sidenav.toggle();">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <div *ngIf="_logoutVisible===true" class="navigation__main-toolbar-controls">
+      <button mat-button (click)="logOut()">Log Out</button>
+    </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav__container">
+
+  <mat-sidenav class="sidenav__snav" #sidenav>
+
+    <div class="sidenav__buttons">
+        <button mat-icon-button (click)="logOut(); sidenav.toggle();">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav__snav-content">
+      <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
