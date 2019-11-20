@@ -3,7 +3,7 @@ const router = express.Router();
 const Cake = require('../models/cake')
 const extractFile = require('../middleware/file');
 const guard = require("../middleware/guard");
-
+const io = require('../socket');
 
 router.post('', guard, extractFile, (req, res, next) => {
     if(req.multerError!==undefined){
@@ -37,6 +37,9 @@ router.post('', guard, extractFile, (req, res, next) => {
                 imagePath: cake.imagePath, 
                 stars: cake.stars
             }
+
+            io.getIO().emit('cake');
+            
             res.status(200).json({
                 message: "SUCCESS: CAKE CREATED!",
                 cake: resCake
@@ -52,23 +55,36 @@ router.post('', guard, extractFile, (req, res, next) => {
 
 
 router.get('', (req, res,next) => {
-    Cake.find({})
-        .then(cakes=>{
-            const resCakes = cakes.map(x=>{
-                return {
-                    id:x._id,
-                    title: x.title,
-                    comment:x.comment, 
-                    imagePath: x.imagePath, 
-                    stars:x.stars,
-                    creator:x.creator
-                }
-            });
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.currentpage;
 
-            res.status(200).json({
-                message: "CAKES RETRIEVED",
-                cakes:resCakes
-            })
+    Cake.find({})
+        .skip((pageSize * currentPage) - pageSize)
+        .limit(pageSize)
+        .then(cakes=>{
+            Cake.countDocuments()
+                .then(count=>{
+                    const resCakes = cakes.map(x=>{
+                        return {
+                            id:x._id,
+                            title: x.title,
+                            comment:x.comment, 
+                            imagePath: x.imagePath, 
+                            stars:x.stars,
+                            creator:x.creator
+                        }
+                    });
+                    res.status(200).json({
+                        message: "CAKES RETRIEVED",
+                        cakes:resCakes,
+                        count: count
+                    })
+                })
+                .catch(err=>{
+                    res.status(500);
+                    next(err);
+                })
+            
         })
         .catch(err=>{
             res.status(500);
@@ -103,6 +119,7 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
         Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:image, stars:stars})
         .then(cake=>{
             if(cake){
+                io.getIO().emit('cake');
                 res.status(202).json({
                     message:`CAKE WITH ${id} UPDATED!`
                 });
@@ -135,6 +152,7 @@ router.delete('/:id', guard, (req, res, next) => {
                 if(cake.creator.toString()===userId){
                     Cake.findByIdAndDelete(id)
                         .then(cake=>{
+                            io.getIO().emit('cake');
                             res.status(200).json({
                                 message: `CAKE WITH ${id} SUCCESSFULLY DELETED`
                             })

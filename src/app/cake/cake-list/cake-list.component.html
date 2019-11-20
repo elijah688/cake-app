@@ -11,3 +11,9 @@
         </app-cake>
     </li>
 </ul>
+<mat-paginator class="cake-list__paginator" 
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="setPaginatorOptions($event)">
+</mat-paginator>

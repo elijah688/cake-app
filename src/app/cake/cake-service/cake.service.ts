@@ -1,26 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, Subject } from 'rxjs';
+import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs';
 import { catchError, map, } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { HttpHeaders } from '@angular/common/http';
 import { Cake } from '../cake-model/cake.model';
+import { CakeSocketService } from '../cake-socket-service/cake-socket.service';
 
 const BACKEND_URL:string = environment.apiUrl +'/cake';
+
+export interface PageOptions {
+  currentPage: number,
+  pageSize: number,
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CakeService {
-  private _cakesSubject:Subject<Cake[]> = new Subject<Cake[]>();
+
+  private _cakesSubject:Subject<{cakes:Cake[],count:number}> = new Subject<{cakes:Cake[],count:number}>();
   private _patchCakeSubject:Subject<Cake> = new Subject<Cake>();
+
+  private _pageOptionsSubject:BehaviorSubject<PageOptions> = new BehaviorSubject<PageOptions>({currentPage:1,pageSize:2});
 
   constructor(private http:HttpClient) { }
 
   getCakes(): void {
-    this.http.get<{message:string, cakes:Cake[]}>(BACKEND_URL).subscribe(res=>{
-      console.log(res);
-      this._cakesSubject.next(res.cakes);
+    this._pageOptionsSubject.subscribe(pageOptions=>{
+      const currentPage:number = pageOptions.currentPage;
+      const pageSize:number = pageOptions.pageSize;
+      const queryParams:string = `?pagesize=${pageSize}&currentpage=${currentPage}` 
+
+      this.http.get<{message:string, cakes:Cake[], count:number}>(BACKEND_URL + queryParams).subscribe(res=>{
+        this._cakesSubject.next({cakes:res.cakes, count:res.count});
+      })
     })
   }
   
@@ -44,7 +58,6 @@ export class CakeService {
         catchError(this.handleError)
       ).subscribe(res=>{
         this.getCakes();
-        console.log(res.message);
       })
   }
 
@@ -98,7 +111,7 @@ export class CakeService {
     return throwError(error);
   }
 
-  get cakesSubject():Observable<Cake[]>{
+  get cakesSubject():Observable<{cakes:Cake[],count:number}>{
     return this._cakesSubject.asObservable();
   }
 
@@ -111,5 +124,9 @@ export class CakeService {
     this._patchCakeSubject.next(cake);    
   }
 
+
+  get pageOptionsSubject():Subject<PageOptions>{
+    return this._pageOptionsSubject;
+  }
 
 }

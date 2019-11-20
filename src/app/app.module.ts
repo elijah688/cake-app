@@ -11,6 +11,10 @@ import { CakeDesignComponent } from './cake/cake-design/cake-design.component';
 import { CakeListComponent } from './cake/cake-list/cake-list.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { CakeComponent } from './cake/cake/cake.component';
+import { CakeHubComponent } from './cake/cake-hub/cake-hub.component';
+import { ActiveStarsPipe } from './cake/cake/pipes/active-stars.pipe';
+import { InactiveStarsPipe } from './cake/cake/pipes/inactive-stars.pipe';
+import { AuthorizationInterceptor } from './authorization/authorization.interceptor';
 
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -20,10 +24,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDividerModule} from '@angular/material/divider';
-import { CakeHubComponent } from './cake/cake-hub/cake-hub.component';
-import { ActiveStarsPipe } from './cake/cake/pipes/active-stars.pipe';
-import { InactiveStarsPipe } from './cake/cake/pipes/inactive-stars.pipe';
-import { AuthorizationInterceptor } from './authorization/authorization.interceptor';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { AuthorizationInterceptor } from './authorization/authorization.intercep
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    MatPaginatorModule
   ],
   providers: [
     {

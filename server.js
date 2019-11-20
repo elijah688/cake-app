@@ -23,3 +23,11 @@ const server = http.createServer(app);
 server.listen(port, () => {
   console.log(`Server running at http://${port}/`);
 });
+
+const io = require("./backend/socket").init(server);
+io.on('connection', socket=>{
+  console.log('Client connected');
+});
+io.on('disconnect', socket=>{
+  console.log('Client disconnected');
+});
