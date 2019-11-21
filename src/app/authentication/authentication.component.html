@@ -1,75 +1,75 @@
-<app-spinner class="authentication-spinner" *ngIf='loading===true'></app-spinner>
-<mat-card *ngIf='loading===false' class="authentication-card">
-    <mat-card-header class="authentication-card__headder">
-        <mat-card-title class="authentication-card__headder-title">
-            {{ authModeLogin===true ? "LOGIN" : "SIGN UP"}}
-        </mat-card-title>
-    </mat-card-header>
+<div class=authentication-container>
 
-    <mat-card-content class="authentication-card__content">
+    <app-spinner class="authentication-spinner" *ngIf='loading===true'></app-spinner>
+    <mat-card *ngIf='loading===false' class="authentication-card">
+        <mat-card-header class="authentication-card__headder">
+            <mat-card-title class="authentication-card__headder-title">
+                {{ authModeLogin===true ? "LOGIN" : "SIGN UP"}}
+            </mat-card-title>
+        </mat-card-header>
 
-<<<<<<< HEAD
-      <form class="authentication-card__form" #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate()">
-=======
-      <form class="authentication-card__form" #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate();">
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
-        <button class="authentication-card__form--secret-submit" #secretSubmit type='submit'></button>
-        <mat-form-field class="authentication-card__content-input" appearance="outline">
-            <mat-label>Username</mat-label>
-            <input 
-            formControlName="email" 
-            matInput placeholder="email@mail.com"
-            [errorStateMatcher]="_errorStateMatcher">
-            <mat-icon matSuffix>account_circle</mat-icon>
-            <mat-hint>The email you signed up with.</mat-hint>
-            <mat-error *ngIf="authForm.get('email').hasError('email') && !authForm.get('email').hasError('required')">
-                Please enter a valid email address.
-            </mat-error>
-            <mat-error *ngIf="authForm.get('email').hasError('required')">
-                Username is required.
-            </mat-error>
-            <mat-error *ngIf="authForm.get('email').hasError('minlength') && !authForm.get('email').hasError('email') && !authForm.get('email').hasError('required') ">
-                You still need {{getRemainingCharacters('email')}} characters.
-            </mat-error>
-            <mat-error *ngIf="authForm.get('email').hasError('emailTaken') && !authForm.get('email').hasError('minlength') && !authForm.get('email').hasError('email') && !authForm.get('email').hasError('required') ">
-                This username is taken.
-            </mat-error>
-            
-        </mat-form-field>
+        <mat-card-content class="authentication-card__content">
 
-        <mat-form-field class="authentication-card__content-input" appearance="outline">
-            <mat-label>Pasword</mat-label>
-            <input 
-            formControlName="password" 
-            matInput placeholder="Password..." 
-            [type]="hidePassword ? 'password' : 'text'"
-            [errorStateMatcher]="_errorStateMatcher">
+        <form class="authentication-card__form" #myForm="ngForm" [formGroup]="authForm" (ngSubmit)="authenticate();">
+            <button class="authentication-card__form--secret-submit" #secretSubmit type='submit'></button>
+            <mat-form-field class="authentication-card__content-input" appearance="outline">
+                <mat-label>Username</mat-label>
+                <input 
+                formControlName="email" 
+                matInput placeholder="email@mail.com"
+                [errorStateMatcher]="_errorStateMatcher">
+                <mat-icon matSuffix>account_circle</mat-icon>
+                <mat-hint>The email you signed up with.</mat-hint>
+                <mat-error *ngIf="authForm.get('email').hasError('email') && !authForm.get('email').hasError('required')">
+                    Please enter a valid email address.
+                </mat-error>
+                <mat-error *ngIf="authForm.get('email').hasError('required')">
+                    Username is required.
+                </mat-error>
+                <mat-error *ngIf="authForm.get('email').hasError('minlength') && !authForm.get('email').hasError('email') && !authForm.get('email').hasError('required') ">
+                    You still need {{getRemainingCharacters('email')}} characters.
+                </mat-error>
+                <mat-error *ngIf="authForm.get('email').hasError('emailTaken') && !authForm.get('email').hasError('minlength') && !authForm.get('email').hasError('email') && !authForm.get('email').hasError('required') ">
+                    This username is taken.
+                </mat-error>
+                
+            </mat-form-field>
 
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-             <mat-error *ngIf="authForm.get('password').hasError('required')">
-                Username is required.
-            </mat-error>
-            <mat-error *ngIf="authForm.get('password').hasError('minlength') && !authForm.get('password').hasError('required') ">
-                You still need {{getRemainingCharacters('password')}} characters.
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field class="authentication-card__content-input" appearance="outline">
+                <mat-label>Pasword</mat-label>
+                <input 
+                formControlName="password" 
+                matInput placeholder="Password..." 
+                [type]="hidePassword ? 'password' : 'text'"
+                [errorStateMatcher]="_errorStateMatcher">
 
-      </form>
+                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="authForm.get('password').hasError('required')">
+                    Username is required.
+                </mat-error>
+                <mat-error *ngIf="authForm.get('password').hasError('minlength') && !authForm.get('password').hasError('required') ">
+                    You still need {{getRemainingCharacters('password')}} characters.
+                </mat-error>
+            </mat-form-field>
 
-    </mat-card-content>
+        </form>
 
-    <mat-card-actions>
-        <button (click)="secretSubmit.click()" mat-flat-button color="accent">{{ authModeLogin===true ? "Login" : "Sign Up"}}</button>
-    </mat-card-actions>
+        </mat-card-content>
 
-    <mat-card-footer>
-      <span> {{ authModeLogin===true ? "Don't have an account?" : "Have an account?"}}
-          <a href="javascript:void(0)" (click)="toggleAuthMode()">
-              {{ authModeLogin===true ? "Sign Up" : "Login  "}}
-          </a>
-      </span>
-    </mat-card-footer>
+        <mat-card-actions>
+            <button (click)="secretSubmit.click()" mat-flat-button color="accent">{{ authModeLogin===true ? "Login" : "Sign Up"}}</button>
+        </mat-card-actions>
+
+        <mat-card-footer>
+        <span> {{ authModeLogin===true ? "Don't have an account?" : "Have an account?"}}
+            <a href="javascript:void(0)" (click)="toggleAuthMode()">
+                {{ authModeLogin===true ? "Sign Up" : "Login  "}}
+            </a>
+        </span>
+        </mat-card-footer>
 
 </mat-card>
+
+</div>

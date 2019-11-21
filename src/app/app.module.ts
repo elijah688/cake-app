@@ -11,10 +11,6 @@ import { CakeDesignComponent } from './cake/cake-design/cake-design.component';
 import { CakeListComponent } from './cake/cake-list/cake-list.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { CakeComponent } from './cake/cake/cake.component';
-<<<<<<< HEAD
-=======
-import { CakeHubComponent } from './cake/cake-hub/cake-hub.component';
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 import { ActiveStarsPipe } from './cake/cake/pipes/active-stars.pipe';
 import { InactiveStarsPipe } from './cake/cake/pipes/inactive-stars.pipe';
 import { AuthorizationInterceptor } from './authorization/authorization.interceptor';
@@ -47,10 +43,6 @@ import { CakeListItemComponent } from './cake/cake-list/cake-list-item/cake-list
     CakeDesignComponent,
     CakeListComponent,
     CakeComponent,
-<<<<<<< HEAD
-=======
-    CakeHubComponent,
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     ActiveStarsPipe,
     InactiveStarsPipe,
     SpinnerComponent,

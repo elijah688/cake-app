@@ -1,32 +1,14 @@
 
 <app-spinner *ngIf="loading===true" class='cake-list__spinner'></app-spinner>
 <div class="cake-list-container">
-<<<<<<< HEAD
-    <h1 *ngIf="cakes.length===0">No cakes yet...</h1>
-=======
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
+    <h1 *ngIf="cakes.length===0 && loading===false">No cakes yet...</h1>
     <ul *ngIf="loading===false" class="cake-list__list">
             <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
                 <app-cake-list-item
                     [id]="cake.id"
                     [title]="cake.title" 
-<<<<<<< HEAD
                     [image]="cake.image">
                 </app-cake-list-item>
-=======
-                    [imagePath]="cake.imagePath">
-                </app-cake-list-item>
-                <!-- <app-cake 
-                    [title]="cake.title"
-                    [imagePath]="cake.imagePath" 
-                    [comment]="cake.comment"
-                    [stars]="cake.stars"
-                    [id]="cake.id"
-                    [creator]="cake.creator"
-                >
-                </app-cake> -->
-                
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
             </li>
         </ul>
         <mat-paginator class="cake-list__paginator" 

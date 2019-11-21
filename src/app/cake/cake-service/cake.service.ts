@@ -3,13 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, Subject, BehaviorSubject, Observer } from 'rxjs';
 import { catchError, map, } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-<<<<<<< HEAD
 import { Cake } from '../cake-model/cake.model';
-=======
-import { HttpHeaders } from '@angular/common/http';
-import { Cake } from '../cake-model/cake.model';
-import { CakeSocketService } from '../cake-socket-service/cake-socket.service';
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 import { Router } from '@angular/router';
 
 const BACKEND_URL:string = environment.apiUrl +'/cake';
@@ -102,16 +96,12 @@ export class CakeService {
         this.getCakes();
       });
   }
-<<<<<<< HEAD
   getCake(id:String):Observable<any>{
     return this.http.get<{message:string, cake:Cake}>(`${BACKEND_URL}/${id}`)
     .pipe(
       catchError(this.handleError)
     );
   }
-=======
-
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
   deleteCake(id:string){
     
@@ -129,11 +119,8 @@ export class CakeService {
     return throwError(error);
   }
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
   get cakesSubject():Observable<{cakes:Cake[],count:number}>{
     return this._cakesSubject.asObservable();
   }
@@ -144,11 +131,7 @@ export class CakeService {
 
 
   editPatchForm(cake:Cake):void{
-<<<<<<< HEAD
     this._patchCakeSubject.next(cake);
-=======
-    this._patchCakeSubject.next(cake);    
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
   }
 
 

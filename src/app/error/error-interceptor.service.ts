@@ -20,21 +20,14 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   handleError(error: HttpErrorResponse, dialog:MatDialog):Observable<HttpEvent<HttpErrorResponse>>{
-<<<<<<< HEAD
-    const errorMessage:string = error.error.message;
-   
-=======
     let errorMessage:string;
-    if(error.status===401){
-      errorMessage="Your credentials are wrong!"
+    if(error.error.message){
+      errorMessage=error.error.message;
     }
     else{
-      errorMessage="Something bad happened!"
+      errorMessage = error.error;
     }
 
-    console.log(error.status===401);
-    console.log(error.status);
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     dialog.open(ErrorDialogComponent,{
       height: '12.69rem',
       width: '17.06rem',

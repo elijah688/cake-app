@@ -41,7 +41,8 @@ export class AuthenticationService {
           data: user.email,
           panelClass: 'auth-dialog'
         })
-        this._emailPatchSubject.next(user.email);  
+        this._emailPatchSubject.next(user.email); 
+         
         this._loadingSubject.next(false);
         console.log(res.message);
       });
@@ -106,10 +107,6 @@ export class AuthenticationService {
 
     const currentUser:string = localStorage.getItem('currentUser');
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     if(token!==null && expirationTime!==null){
       this._timeout = setTimeout(() => {
         this.logOut();

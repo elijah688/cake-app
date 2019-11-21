@@ -1,14 +1,11 @@
-import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import {FormBuilder, FormGroup, Validators, NgForm} from '@angular/forms';
 import { AuthenticationService } from './authentication-service/authentication.service';
 import { User } from './user.model';
 import { uniqueEmail } from './authentication-validators/unique-email.validator';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MyErrorStateMatcher } from '../error-state-matcher/error-state-matcher';
-<<<<<<< HEAD
-=======
-import { Router } from '@angular/router';
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
+import { format } from 'url';
 
 @Component({
   selector: 'app-authentication',
@@ -31,21 +28,16 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
+
   constructor(
     private fb: FormBuilder, 
     private authService:AuthenticationService) { }
 
   ngOnInit() {
    this._authModeLoginSubjectSubscription = this._authModeLoginSubject.subscribe(isLogin=>{
-<<<<<<< HEAD
-    this.handleEmailValidators(isLogin);
-=======
     this.authModeLogin = isLogin;
-    this.handleEmailValidators();
-
-    this.authForm.valueChanges.subscribe(res=>{
-    })
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
+    this.handleEmailValidators(this.authModeLogin);
+    console.log("auth login mode is:"+this.authModeLogin)
     })
 
     this.loadingSubscription = this.authService.loadingSubject.subscribe(loading=>{
@@ -53,22 +45,19 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     })
 
     this._patchEmailSub = this.authService.emailPatchSubject.subscribe(email=>{
-      this.authForm.get("email").patchValue(email);
-      this.authForm.get("email").updateValueAndValidity();
+      if(email){
+        this.authForm.get("email").patchValue(email);
+        this.authForm.get("email").updateValueAndValidity();
+        this._authModeLoginSubject.next(true);
+      }
     })
 
   }
 
-<<<<<<< HEAD
  
   toggleAuthMode():void{
     this.authModeLogin = !this.authModeLogin;
     this._authModeLoginSubject.next(this.authModeLogin);
-=======
-
-  toggleAuthMode():void{
-    this._authModeLoginSubject.next(!this.authModeLogin);
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
   }
 
   getRemainingCharacters(formControlName:string):number {
@@ -103,22 +92,14 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
       else{
         this.authService.signUp(user);
       }
-<<<<<<< HEAD
+      this.authForm.reset();
     }
   }
+
+ 
 
   handleEmailValidators(isLogin:boolean){
     if(isLogin===true){
-=======
-
-      this.authForm.reset();
-      this._authModeLoginSubject.next(true);
-    }
-  }
-
-  handleEmailValidators(){
-    if(this.authModeLogin===true){
->>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
       this.authForm.get("email").clearAsyncValidators();
     }
     else{
