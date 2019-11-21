@@ -3,9 +3,9 @@ import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { CakeService } from '../cake-service/cake.service';
 import { Cake } from '../cake-model/cake.model';
 import { Subscription } from 'rxjs';
-import { TitleCasePipe } from '@angular/common';
 import { mimeType } from './validators/mime-type.validator';
 import { MyErrorStateMatcher } from 'src/app/error-state-matcher/error-state-matcher';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cake-design',
@@ -29,16 +29,16 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private cakeService:CakeService
+    private cakeService:CakeService,
+    private _router:Router
     ) { }
 
   ngOnInit() {
     this.patchCakeSub = this.cakeService.patchCakeSubject.subscribe(cake=>{
-     this.patchValuesOnEdit(cake);
-     console.log(cake);
+      if(cake){
+        this.patchValuesOnEdit(cake);
+      }
     })
-
-   
   }
 
 
@@ -92,6 +92,8 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
       this.stars = [true,false,false,false,false];
       this.cakeForm.reset();
       this.creator = undefined;
+
+      this._router.navigate(['list']);
     }
    
   }
@@ -100,14 +102,14 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     const id:string = cake.id;
     const title:string = cake.title;
     const comment: string = cake.comment;
-    const imagePath: string | File = cake.image;
+    const image: string | File = cake.image;
     const stars: boolean[] = cake.stars;
     const creator:string = cake.creator;
 
     this.id = id;
-    this.cakeForm.patchValue({title: title, comment: comment, image: imagePath});
+    this.cakeForm.patchValue({title: title, comment: comment, image: image});
     this.stars = stars;
-    this.imgUrl = (imagePath as string);
+    this.imgUrl = (image as string);
     this.creator = creator;
 
     this.isEditing = true;
@@ -134,7 +136,6 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
   
       const cake:Cake = {id:id, title:title, comment:comment, image:image, stars:stars, creator:this.creator}
       this.cakeService.editCake(cake);
-  
 
       this.id = undefined;
       this.imgUrl = undefined;

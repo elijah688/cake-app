@@ -69,8 +69,8 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   authenticate():void{
-    this.loading = true;
     if(this.authForm.valid){
+      this.loading = true;
       const email = this.authForm.get('email').value;
       const password = this.authForm.get('password').value;
   

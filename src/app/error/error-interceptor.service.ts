@@ -20,16 +20,8 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   handleError(error: HttpErrorResponse, dialog:MatDialog):Observable<HttpEvent<HttpErrorResponse>>{
-    let errorMessage:string;
-    if(error.status===401){
-      errorMessage="You're Unauthorized!"
-    }
-    else{
-      errorMessage="Something bad happened!"
-    }
-
-    console.log(error.status===401);
-    console.log(error.status);
+    const errorMessage:string = error.error.message;
+   
     dialog.open(ErrorDialogComponent,{
       height: '12.69rem',
       width: '17.06rem',

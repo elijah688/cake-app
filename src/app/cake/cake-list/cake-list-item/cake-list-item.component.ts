@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Subject, Subscribable, Subscription } from 'rxjs';
-import { AuthenticationService } from 'src/app/authentication/authentication-service/authentication.service';
+import { Subscription } from 'rxjs';
 import { CakeService } from '../../cake-service/cake.service';
-import { Cake } from '../../cake-model/cake.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cake-list-item',
@@ -13,13 +11,9 @@ import { Router } from '@angular/router';
 export class CakeListItemComponent implements OnInit {
   @Input() public id:string;
   @Input() public title:string;
-  @Input() public imagePath:string;
-  // @Input() public comment:string;
-  // @Input() public stars:boolean[];
-  // @Input() public creator:string;
-  // public currentUserId:string;
+  @Input() public image:string;
+
   public currentUserSub:Subscription = new Subscription();
-  
 
   constructor(private cakeService:CakeService, private _router:Router) { }
 

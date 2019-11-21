@@ -18,13 +18,13 @@ router.post('', guard, extractFile, (req, res, next) => {
     const protocol = req.protocol;
     const host = req.get('host');
     const filename = req.file.filename;
-    const imagePath = `${protocol}://${host}/images/${filename}`;
+    const image = `${protocol}://${host}/images/${filename}`;
 
 
     const newCake = new Cake({
         title: title,
         comment: comment,
-        imagePath: imagePath,
+        image: image,
         stars: stars,
         creator: creator
     });
@@ -32,11 +32,13 @@ router.post('', guard, extractFile, (req, res, next) => {
     newCake.save()
         .then(cake=>{
             const resCake = {
-                id:cake._id, 
+                id: cake._id, 
                 title: cake.title, 
-                imagePath: cake.imagePath, 
-                stars: cake.stars
+                image: cake.image, 
+                stars: cake.stars,
+                creator: cake.creator
             }
+            
 
             io.getIO().emit('cake');
             
@@ -54,42 +56,26 @@ router.post('', guard, extractFile, (req, res, next) => {
 
 
 
-router.get('', (req, res,next) => {
+router.get('', async (req, res,next) => {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.currentpage;
-
-    Cake.find({})
+    try {
+        const cakes = await Cake.find({})
         .skip((pageSize * currentPage) - pageSize)
-        .limit(pageSize)
-        .then(cakes=>{
-            Cake.countDocuments()
-                .then(count=>{
-                    const resCakes = cakes.map(x=>{
-                        return {
-                            id:x._id,
-                            title: x.title,
-                            comment:x.comment, 
-                            imagePath: x.imagePath, 
-                            stars:x.stars,
-                            creator:x.creator
-                        }
-                    });
-                    res.status(200).json({
-                        message: "CAKES RETRIEVED",
-                        cakes:resCakes,
-                        count: count
-                    })
-                })
-                .catch(err=>{
-                    res.status(500);
-                    next(err);
-                })
-            
-        })
-        .catch(err=>{
-            res.status(500);
-            next(err);
+        .limit(pageSize);
+        const resCakes = [...cakes].map(x=>{ 
+            return {id:x._id, title:x.title, comment:x.comment,image:x.image, stars:x.stars, creator:x.creator}
         });
+        const count = await Cake.countDocuments();
+        res.status(200).json({
+            message: "CAKES RETRIEVED",
+            cakes:resCakes,
+            count: count
+        })
+    } catch (error) {
+        res.status(500);
+        next(error);
+    }
 })
 
 router.put('/:id', guard, extractFile,(req, res, next)=> {
@@ -99,6 +85,7 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
     }
     
     const id = req.params.id;
+    console.log(id);
     const title = req.body.title;
     const comment = req.body.comment;
     const stars = JSON.parse(req.body.stars);
@@ -116,7 +103,7 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
     const creator = req.body.creator;
 
     if(userId===creator){
-        Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:image, stars:stars})
+        Cake.findByIdAndUpdate(id, {title:title, comment:comment, image:image, stars:stars})
         .then(cake=>{
             if(cake){
                 io.getIO().emit('cake');
@@ -135,7 +122,7 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
         });
     }
     else{
-        res.status(403).json(
+        res.status(401).json(
             {message:"YOU ARE UNAUTHORIZED!"
         });
     }
@@ -180,6 +167,31 @@ router.delete('/:id', guard, (req, res, next) => {
         })
 });
 
+
+router.get('/:id', async (req, res, next) => {
+    let id = req.params.id;
+    try{
+        const cake = await Cake.findOne({_id:id});
+        const resCake = [cake].map(x=>{return {id:x._id, title:x.title, comment:x.comment,image:x.image, stars:x.stars, creator:x.creator}})[0];
+        if(cake){
+            res.status(200).json({
+                message: `CAKE WITH ${id} RETRIEVED SUCCESSFULLY`,
+                cake: resCake
+            })
+        }
+        else{
+            res.status(404).json({
+                message: "CAKE NOT FOUND"
+            })
+        }
+    }
+    catch(err){
+        res.status(500);
+        next(err);
+    }
+
+    
+});
 
 
 module.exports = router;
