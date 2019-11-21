@@ -1,33 +1,59 @@
+<<<<<<< HEAD
 <mat-card *ngIf="currentCake" class="cake-card">
+=======
+<mat-card class="cake-card">
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     <mat-card-header class="cake-card__header">
 
         <mat-card-title class="cake-card__header--title">
             <h3>
+<<<<<<< HEAD
                 {{currentCake.title}}
+=======
+                {{title}}
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
             </h3>
         </mat-card-title>
 
         <mat-card-subtitle class="cake-card__header--subtitle">        
+<<<<<<< HEAD
             <mat-icon class="cake-card__header--subtitle-stars" *ngFor="let star of (currentCake.stars | active)">star</mat-icon>
             <mat-icon class="cake-card__header--subtitle-stars--empty" *ngFor="let star of (currentCake.stars | inactive)">star_border</mat-icon>
+=======
+            <mat-icon class="cake-card__header--subtitle-stars" *ngFor="let star of (stars | active)">star</mat-icon>
+            <mat-icon class="cake-card__header--subtitle-stars--empty" *ngFor="let star of (stars | inactive)">star_border</mat-icon>
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
         </mat-card-subtitle>
 
     </mat-card-header>
 
+<<<<<<< HEAD
     <img class="cake-card__image" mat-card-image [src]="currentCake.image" [alt]="currentCake.title">
+=======
+    <img class="cake-card__image" mat-card-image [src]="imagePath" [alt]="title">
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     
     <mat-card-content class="cake-card__content">
         <mat-divider [inset]="true"></mat-divider>
         <p>
+<<<<<<< HEAD
            {{currentCake.comment}}
+=======
+           {{comment}}
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
         </p>
         <mat-divider [inset]="true"></mat-divider>
     </mat-card-content>
 
     <mat-card-actions class="cake-card__actions">
+<<<<<<< HEAD
         <button *ngIf="currentCake.creator===currentUserId" (click)="editCake()" mat-stroked-button color='primary'>Edit</button>
         <button *ngIf="currentCake.creator===currentUserId" (click)="deleteCake()" mat-stroked-button color='warn'>Delete</button>
+=======
+        <button *ngIf="creator===currentUserId" (click)="editCake()" [routerLink]="['/design']" mat-stroked-button color='primary'>Edit</button>
+        <button *ngIf="creator===currentUserId" (click)="deleteCake()" mat-stroked-button color='warn'>Delete</button>
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     </mat-card-actions>
 
 </mat-card>

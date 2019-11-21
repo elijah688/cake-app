@@ -2,9 +2,13 @@
     <button mat-icon-button class="navigation__main-toolbar--hamburger" (click)="sidenav.toggle();">
         <mat-icon>menu</mat-icon>
     </button>
+<<<<<<< HEAD
     <div *ngIf="_visible===true" class="navigation__main-toolbar-controls">
       <button mat-button (click)="showDesign()">Add Cake</button>
       <button mat-button (click)="showCakes()">Show Cakes</button>
+=======
+    <div *ngIf="_logoutVisible===true" class="navigation__main-toolbar-controls">
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
       <button mat-button (click)="logOut()">Log Out</button>
     </div>
 </mat-toolbar>
@@ -14,6 +18,7 @@
   <mat-sidenav class="sidenav__snav" #sidenav>
 
     <div class="sidenav__buttons">
+<<<<<<< HEAD
       <button *ngIf="_visible===true" mat-icon-button (click)="showCakes(); sidenav.toggle();">
         <mat-icon>add</mat-icon>
       </button>
@@ -23,6 +28,11 @@
       <button mat-icon-button (click)="logOut(); sidenav.toggle();">
         <mat-icon>power_settings_new</mat-icon>
       </button>
+=======
+        <button mat-icon-button (click)="logOut(); sidenav.toggle();">
+          <mat-icon>power_settings_new</mat-icon>
+        </button>
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     </div>
 
   </mat-sidenav>

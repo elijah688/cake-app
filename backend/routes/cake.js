@@ -18,13 +18,21 @@ router.post('', guard, extractFile, (req, res, next) => {
     const protocol = req.protocol;
     const host = req.get('host');
     const filename = req.file.filename;
+<<<<<<< HEAD
     const image = `${protocol}://${host}/images/${filename}`;
+=======
+    const imagePath = `${protocol}://${host}/images/${filename}`;
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
 
     const newCake = new Cake({
         title: title,
         comment: comment,
+<<<<<<< HEAD
         image: image,
+=======
+        imagePath: imagePath,
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
         stars: stars,
         creator: creator
     });
@@ -32,6 +40,7 @@ router.post('', guard, extractFile, (req, res, next) => {
     newCake.save()
         .then(cake=>{
             const resCake = {
+<<<<<<< HEAD
                 id: cake._id, 
                 title: cake.title, 
                 image: cake.image, 
@@ -39,6 +48,13 @@ router.post('', guard, extractFile, (req, res, next) => {
                 creator: cake.creator
             }
             
+=======
+                id:cake._id, 
+                title: cake.title, 
+                imagePath: cake.imagePath, 
+                stars: cake.stars
+            }
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
             io.getIO().emit('cake');
             
@@ -56,6 +72,7 @@ router.post('', guard, extractFile, (req, res, next) => {
 
 
 
+<<<<<<< HEAD
 router.get('', async (req, res,next) => {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.currentpage;
@@ -76,6 +93,44 @@ router.get('', async (req, res,next) => {
         res.status(500);
         next(error);
     }
+=======
+router.get('', (req, res,next) => {
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.currentpage;
+
+    Cake.find({})
+        .skip((pageSize * currentPage) - pageSize)
+        .limit(pageSize)
+        .then(cakes=>{
+            Cake.countDocuments()
+                .then(count=>{
+                    const resCakes = cakes.map(x=>{
+                        return {
+                            id:x._id,
+                            title: x.title,
+                            comment:x.comment, 
+                            imagePath: x.imagePath, 
+                            stars:x.stars,
+                            creator:x.creator
+                        }
+                    });
+                    res.status(200).json({
+                        message: "CAKES RETRIEVED",
+                        cakes:resCakes,
+                        count: count
+                    })
+                })
+                .catch(err=>{
+                    res.status(500);
+                    next(err);
+                })
+            
+        })
+        .catch(err=>{
+            res.status(500);
+            next(err);
+        });
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 })
 
 router.put('/:id', guard, extractFile,(req, res, next)=> {
@@ -85,7 +140,10 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
     }
     
     const id = req.params.id;
+<<<<<<< HEAD
     console.log(id);
+=======
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     const title = req.body.title;
     const comment = req.body.comment;
     const stars = JSON.parse(req.body.stars);
@@ -103,7 +161,11 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
     const creator = req.body.creator;
 
     if(userId===creator){
+<<<<<<< HEAD
         Cake.findByIdAndUpdate(id, {title:title, comment:comment, image:image, stars:stars})
+=======
+        Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:image, stars:stars})
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
         .then(cake=>{
             if(cake){
                 io.getIO().emit('cake');
@@ -122,7 +184,11 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
         });
     }
     else{
+<<<<<<< HEAD
         res.status(401).json(
+=======
+        res.status(403).json(
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
             {message:"YOU ARE UNAUTHORIZED!"
         });
     }
@@ -168,6 +234,7 @@ router.delete('/:id', guard, (req, res, next) => {
 });
 
 
+<<<<<<< HEAD
 router.get('/:id', async (req, res, next) => {
     let id = req.params.id;
     try{
@@ -193,5 +260,7 @@ router.get('/:id', async (req, res, next) => {
     
 });
 
+=======
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
 module.exports = router;

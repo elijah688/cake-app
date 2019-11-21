@@ -3,7 +3,10 @@ import { CakeService } from '../cake-service/cake.service';
 import { Cake } from '../cake-model/cake.model';
 import { Subject, Subscribable, Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/authentication/authentication-service/authentication.service';
+<<<<<<< HEAD
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+=======
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
 @Component({
   selector: 'app-cake',
@@ -11,6 +14,7 @@ import { ActivatedRoute, RouterLink, Router } from '@angular/router';
   styleUrls: ['./cake.component.sass']
 })
 export class CakeComponent implements OnInit, OnDestroy {
+<<<<<<< HEAD
   public currentCake:Cake ;
   public currentUserId:string;
   public currentUserSub:Subscription = new Subscription();
@@ -22,12 +26,26 @@ export class CakeComponent implements OnInit, OnDestroy {
     private authService:AuthenticationService, 
     private _route:ActivatedRoute,
     private _router:Router) { }
+=======
+  @Input() public id:string;
+  @Input() public title:string;
+  @Input() public comment:string;
+  @Input() public stars:boolean[];
+  @Input() public imagePath:string;
+  @Input() public creator:string;
+  public currentUserId:string;
+  public currentUserSub:Subscription = new Subscription();
+  
+
+  constructor(private cakeService:CakeService, private authService:AuthenticationService) { }
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
   ngOnInit() {
     this.currentUserSub = this.authService.currentUserIdSubject.subscribe(currentUserId=>{
       this.currentUserId = currentUserId;
     })
 
+<<<<<<< HEAD
     this.cakeIdSub = this.cakeIdSub = this._route.paramMap.subscribe(params=>{
       this.cakeId = params.get('id');
       this.setCake();
@@ -78,6 +96,28 @@ export class CakeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.currentUserSub.unsubscribe();
     this.cakeIdSub.unsubscribe()
+=======
+  }
+
+  editCake():void{
+    const cake:Cake = {
+      id:this.id,
+      title:this.title,
+      comment: this.comment,
+      image: this.imagePath,
+      stars: this.stars,
+      creator:this.creator
+    }
+    this.cakeService.editPatchForm(cake);
+  }
+
+  deleteCake():void{
+    this.cakeService.deleteCake(this.id);
+  }
+
+  ngOnDestroy() {
+    this.currentUserSub.unsubscribe()
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
   }
 
 

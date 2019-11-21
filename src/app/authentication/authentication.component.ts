@@ -5,6 +5,10 @@ import { User } from './user.model';
 import { uniqueEmail } from './authentication-validators/unique-email.validator';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MyErrorStateMatcher } from '../error-state-matcher/error-state-matcher';
+<<<<<<< HEAD
+=======
+import { Router } from '@angular/router';
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
 
 @Component({
   selector: 'app-authentication',
@@ -33,7 +37,15 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
    this._authModeLoginSubjectSubscription = this._authModeLoginSubject.subscribe(isLogin=>{
+<<<<<<< HEAD
     this.handleEmailValidators(isLogin);
+=======
+    this.authModeLogin = isLogin;
+    this.handleEmailValidators();
+
+    this.authForm.valueChanges.subscribe(res=>{
+    })
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
     })
 
     this.loadingSubscription = this.authService.loadingSubject.subscribe(loading=>{
@@ -47,10 +59,16 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   }
 
+<<<<<<< HEAD
  
   toggleAuthMode():void{
     this.authModeLogin = !this.authModeLogin;
     this._authModeLoginSubject.next(this.authModeLogin);
+=======
+
+  toggleAuthMode():void{
+    this._authModeLoginSubject.next(!this.authModeLogin);
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
   }
 
   getRemainingCharacters(formControlName:string):number {
@@ -85,11 +103,22 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
       else{
         this.authService.signUp(user);
       }
+<<<<<<< HEAD
     }
   }
 
   handleEmailValidators(isLogin:boolean){
     if(isLogin===true){
+=======
+
+      this.authForm.reset();
+      this._authModeLoginSubject.next(true);
+    }
+  }
+
+  handleEmailValidators(){
+    if(this.authModeLogin===true){
+>>>>>>> d2acb74c14608692b5d8215548cd14ff5d8d262c
       this.authForm.get("email").clearAsyncValidators();
     }
     else{
