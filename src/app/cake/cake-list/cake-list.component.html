@@ -1,7 +1,12 @@
 
 <app-spinner *ngIf="loading===true" class='cake-list__spinner'></app-spinner>
 <div class="cake-list-container">
-    <h1 *ngIf="cakes.length===0 && loading===false">No cakes yet...</h1>
+    <div *ngIf="cakes.length===0 && loading===false" class="cake-list__no-cakes">
+        <h1 class="mat-display-1" >
+            <mat-icon>cake</mat-icon>
+            No cakes yet...
+        </h1>
+    </div>
     <ul *ngIf="loading===false" class="cake-list__list">
             <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
                 <app-cake-list-item

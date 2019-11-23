@@ -64,8 +64,8 @@
                 </div>
 
 
-                <div class="cake-design__form-yumFactor">
-                    <mat-icon class="cake-design__form-yumFactor--icon" color="{{yumFactor[i]===true ? 'accent' : 'none'}}" (click)="toggleStar(i)" *ngFor="let star of yumFactor; let i = index">{{yumFactor[i]===true ? 'star' : 'star_border'}}</mat-icon> 
+                <div class="cake-design__form-stars">
+                    <mat-icon class="cake-design__form-stars--icon" color="{{stars[i]===true ? 'accent' : 'none'}}" (click)="toggleStar(i)" *ngFor="let star of stars; let i = index">{{stars[i]===true ? 'star' : 'star_border'}}</mat-icon> 
                 </div>
                 
                 <mat-divider [inset]="true"></mat-divider>

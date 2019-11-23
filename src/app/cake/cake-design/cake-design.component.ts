@@ -5,7 +5,6 @@ import { Cake } from '../cake-model/cake.model';
 import { Subscription } from 'rxjs';
 import { mimeType } from './validators/mime-type.validator';
 import { MyErrorStateMatcher } from 'src/app/error-state-matcher/error-state-matcher';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cake-design',
@@ -14,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class CakeDesignComponent implements OnInit, OnDestroy {
   public id:string;
-  public yumFactor:boolean[] = [true, false, false, false, false];
+  public stars:boolean[] = [true, false, false, false, false];
   public imgUrl:string;
   public creator:string;
   public cakeForm = this.fb.group({
@@ -30,7 +29,6 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private cakeService:CakeService,
-    private _router:Router
     ) { }
 
   ngOnInit() {
@@ -63,12 +61,12 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
 
   toggleStar(index:number):void{
-    if(index!==0 && this.yumFactor[index-1]===true && this.yumFactor[index+1]===false){
-      this.yumFactor[index] = !this.yumFactor[index];
+    if(index!==0 && this.stars[index-1]===true && this.stars[index+1]===false){
+      this.stars[index] = !this.stars[index];
     }
 
-    if(index===4 && this.yumFactor[3]===true){
-      this.yumFactor[4] = !this.yumFactor[4];
+    if(index===4 && this.stars[3]===true){
+      this.stars[4] = !this.stars[4];
     }
   }
 
@@ -83,7 +81,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
         title: title,
         comment: comment,
         imagePath: file,
-        yumFactor: this.yumFactor,
+        yumFactor: this.cakeService.starsToYum(this.stars),
         creator: this.creator
       }
   
@@ -91,10 +89,9 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
       this.id = undefined;
       this.imgUrl = undefined;
-      this.yumFactor = [true,false,false,false,false];
-      this.cakeForm.reset();
+      this.stars = [true,false,false,false,false];
       this.creator = undefined;
-      this._router.navigate(['list']);
+      this.cakeForm.reset();
     }
    
   }
@@ -104,12 +101,12 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     const title:string = cake.title;
     const comment: string = cake.comment;
     const imagePath: string | File = cake.imagePath;
-    const yumFactor: boolean[] = cake.yumFactor;
+    const yumFactor: number = cake.yumFactor;
     const creator:string = cake.creator;
 
     this.id = id;
     this.cakeForm.patchValue({title: title, comment: comment, image: imagePath});
-    this.yumFactor = yumFactor;
+    this.stars = this.cakeService.yumToStars(yumFactor);
     this.imgUrl = (imagePath as string);
     this.creator = creator;
 
@@ -126,7 +123,7 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
       const title: string = this.cakeForm.get("title").value;
       const comment:string = this.cakeForm.get("comment").value;
       const imageForm: File = this.cakeForm.get('image').value;
-      const yumFactor: boolean[] = this.yumFactor;
+      const yumFactor: number = this.cakeService.starsToYum(this.stars);
       let imagePath: string | File; 
       if(imageForm===undefined){
         imagePath = this.imgUrl;
@@ -140,12 +137,14 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
       this.id = undefined;
       this.imgUrl = undefined;
-      this.yumFactor = [true,false,false,false,false];
+      this.stars = [true,false,false,false,false];
       this.isEditing= false;
       this.cakeForm.reset();
       this.creator = undefined;
     }
     
   }
+
+ 
 
 }

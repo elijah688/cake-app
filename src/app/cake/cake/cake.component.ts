@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { CakeService } from '../cake-service/cake.service';
 import { Cake } from '../cake-model/cake.model';
-import { Subject, Subscribable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/authentication/authentication-service/authentication.service';
-import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cake',
@@ -21,7 +21,7 @@ export class CakeComponent implements OnInit, OnDestroy {
     private cakeService:CakeService, 
     private authService:AuthenticationService, 
     private _route:ActivatedRoute,
-    private _router:Router) { }
+   ) { }
 
   ngOnInit() {
     this.currentUserSub = this.authService.currentUserIdSubject.subscribe(currentUserId=>{
@@ -50,7 +50,6 @@ export class CakeComponent implements OnInit, OnDestroy {
   editCake():void{
     if(this.currentCake){
       this.cakeService.editPatchForm(this.currentCake);
-      this._router.navigate([`design/${this.cakeId}`]);
       this.cakeId = null;
       this.currentUserId = null;
     }
@@ -65,7 +64,6 @@ export class CakeComponent implements OnInit, OnDestroy {
       this.cakeService.deleteCake(this.cakeId);
       this.cakeId = null;
       this.currentUserId = null;
-      this._router.navigate(['/list']);
     }
     else{
       const error = new Error('NO CAKE IS LOADED');
@@ -73,6 +71,9 @@ export class CakeComponent implements OnInit, OnDestroy {
     }
   }
 
+  getStars(yum:number):boolean[]{
+    return this.cakeService.yumToStars(yum);
+  }
   
 
   ngOnDestroy() {

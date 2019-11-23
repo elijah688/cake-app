@@ -3,6 +3,6 @@ export interface Cake {
     title: string,
     comment: string,
     imagePath: string | File,
-    yumFactor: boolean[],
+    yumFactor: number,
     creator: string; 
 }

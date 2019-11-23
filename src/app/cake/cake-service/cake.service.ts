@@ -41,7 +41,8 @@ export class CakeService {
   }
   
   addCake(cake: Cake): void {
-   
+    this._router.navigate(['list']);
+    
     const title:string = cake.title;
     const comment:string = cake.comment;
     const imagePath:File = <File>cake.imagePath;
@@ -65,6 +66,8 @@ export class CakeService {
 
 
   editCake(cake:Cake):void{
+    this._router.navigate(['list']);
+
     const id:string = cake.id;
     const title:string = cake.title;
     const comment:string = cake.comment;
@@ -92,7 +95,6 @@ export class CakeService {
         catchError(this.handleError))
       .subscribe(res=>{
         console.log(res.message)
-        this._router.navigate(['/list']);
         this.getCakes();
       });
   }
@@ -104,6 +106,7 @@ export class CakeService {
   }
 
   deleteCake(id:string){
+    this._router.navigate(['/list']);
     
     this.http.delete<{message:string}>(`${BACKEND_URL}/${id}`)
     .pipe(
@@ -131,7 +134,10 @@ export class CakeService {
 
 
   editPatchForm(cake:Cake):void{
-    this._patchCakeSubject.next(cake);
+    if(cake){
+      this._router.navigate([`design/${cake.id}`]);
+      this._patchCakeSubject.next(cake);
+    }
   }
 
 
@@ -141,6 +147,25 @@ export class CakeService {
 
   get loadingSubject():Observable<boolean>{
     return this._loadingSubject.asObservable();
+  }
+
+
+
+  yumToStars(yumFactor):boolean[]{
+    const active = yumFactor;
+    const inactive = 5 - active;
+    const avtiveStars = Array(active).fill(true);
+    const inactiveStars = Array(inactive).fill(false);
+
+    const stars = [...avtiveStars, ...inactiveStars];
+    
+    
+    return stars;
+  }
+
+  starsToYum(stars:boolean[]):number{
+    const yum = stars.filter(s=>s===true).length;
+    return yum
   }
 
 }
