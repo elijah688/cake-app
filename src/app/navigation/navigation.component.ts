@@ -33,11 +33,11 @@ export class NavigationComponent implements OnInit {
   }
 
   showCakes():void{
-    this._router.navigate(['/list'])
+    this._router.navigate(['/cake/list'])
   }
 
   showDesign():void{
     this._cakeServ.editPatchForm(null);
-    this._router.navigate(['/design'])
+    this._router.navigate(['/cake/design'])
   }
 }
