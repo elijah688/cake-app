@@ -12,20 +12,20 @@ router.post('', guard, extractFile, (req, res, next) => {
     }
     const title = req.body.title;
     const comment = req.body.comment;
-    const stars = JSON.parse(req.body.stars);
+    const yumFactor = JSON.parse(req.body.yumFactor);
     const creator = res.userData.id;
 
     const protocol = req.protocol;
     const host = req.get('host');
     const filename = req.file.filename;
-    const image = `${protocol}://${host}/images/${filename}`;
+    const imagePath = `${protocol}://${host}/images/${filename}`;
 
 
     const newCake = new Cake({
         title: title,
         comment: comment,
-        image: image,
-        stars: stars,
+        imagePath: imagePath,
+        yumFactor: yumFactor,
         creator: creator
     });
 
@@ -34,8 +34,8 @@ router.post('', guard, extractFile, (req, res, next) => {
             const resCake = {
                 id: cake._id, 
                 title: cake.title, 
-                image: cake.image, 
-                stars: cake.stars,
+                imagePath: cake.imagePath, 
+                yumFactor: cake.yumFactor,
                 creator: cake.creator
             }
             
@@ -64,7 +64,7 @@ router.get('', async (req, res,next) => {
         .skip((pageSize * currentPage) - pageSize)
         .limit(pageSize);
         const resCakes = [...cakes].map(x=>{ 
-            return {id:x._id, title:x.title, comment:x.comment,image:x.image, stars:x.stars, creator:x.creator}
+            return {id:x._id, title:x.title, comment:x.comment,imagePath:x.imagePath, yumFactor:x.yumFactor, creator:x.creator}
         });
         const count = await Cake.countDocuments();
         res.status(200).json({
@@ -88,22 +88,22 @@ router.put('/:id', guard, extractFile,(req, res, next)=> {
     console.log(id);
     const title = req.body.title;
     const comment = req.body.comment;
-    const stars = JSON.parse(req.body.stars);
-    let image;
+    const yumFactor = JSON.parse(req.body.yumFactor);
+    let imagePath;
         if(req.file!==undefined){
             const protocol = req.protocol;
             const host = req.get('host');
             const name = req.file.filename;
-            image = `${protocol}://${host}/images/${name}`;
+            imagePath = `${protocol}://${host}/images/${name}`;
         }
         else{
-            image = req.body.image;
+            imagePath = req.body.imagePath;
         }
     const userId = res.userData.id;
     const creator = req.body.creator;
 
     if(userId===creator){
-        Cake.findByIdAndUpdate(id, {title:title, comment:comment, image:image, stars:stars})
+        Cake.findByIdAndUpdate(id, {title:title, comment:comment, imagePath:imagePath, yumFactor:yumFactor})
         .then(cake=>{
             if(cake){
                 io.getIO().emit('cake');
@@ -172,7 +172,7 @@ router.get('/:id', async (req, res, next) => {
     let id = req.params.id;
     try{
         const cake = await Cake.findOne({_id:id});
-        const resCake = [cake].map(x=>{return {id:x._id, title:x.title, comment:x.comment,image:x.image, stars:x.stars, creator:x.creator}})[0];
+        const resCake = [cake].map(x=>{return {id:x._id, title:x.title, comment:x.comment,imagePath:x.imagePath, yumFactor:x.yumFactor, creator:x.creator}})[0];
         if(cake){
             res.status(200).json({
                 message: `CAKE WITH ${id} RETRIEVED SUCCESSFULLY`,

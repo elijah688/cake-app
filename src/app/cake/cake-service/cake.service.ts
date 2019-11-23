@@ -44,15 +44,15 @@ export class CakeService {
    
     const title:string = cake.title;
     const comment:string = cake.comment;
-    const image:File = <File>cake.image;
-    const stars:string = JSON.stringify(cake.stars);
+    const imagePath:File = <File>cake.imagePath;
+    const yumFactor:string = JSON.stringify(cake.yumFactor);
     const creator:string = cake.creator;
 
     const cakeData = new FormData();
     cakeData.append("title", title);
     cakeData.append("comment", comment);
-    cakeData.append("image", image, title);
-    cakeData.append("stars", stars);
+    cakeData.append("imagePath", imagePath, title);
+    cakeData.append("yumFactor", yumFactor);
     cakeData.append("creator", creator);
 
     this.http.post<{message:string, cake:Cake}>(BACKEND_URL, cakeData)
@@ -68,23 +68,23 @@ export class CakeService {
     const id:string = cake.id;
     const title:string = cake.title;
     const comment:string = cake.comment;
-    const image:File | string = cake.image;
-    const stars:string = JSON.stringify(cake.stars);
+    const imagePath:File | string = cake.imagePath;
+    const yumFactor:string = JSON.stringify(cake.yumFactor);
     const creator:string = cake.creator;
 
 
     const cakeData = new FormData();
     cakeData.append("title", title);
     cakeData.append("comment", comment);
-    cakeData.append("stars", stars);
+    cakeData.append("yumFactor", yumFactor);
     cakeData.append("creator", creator);
 
 
-    if(typeof(image)==='string'){
-      cakeData.append("image", image);
+    if(typeof(imagePath)==='string'){
+      cakeData.append("imagePath", imagePath);
     }
     else{
-      cakeData.append("image", image, title);
+      cakeData.append("imagePath", imagePath, title);
     }
    
     this.http.put<{message:string}>(`${BACKEND_URL}/${id}`, cakeData)

@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class CakeDesignComponent implements OnInit, OnDestroy {
   public id:string;
-  public stars:boolean[] = [true, false, false, false, false];
+  public yumFactor:boolean[] = [true, false, false, false, false];
   public imgUrl:string;
   public creator:string;
   public cakeForm = this.fb.group({
@@ -63,12 +63,12 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
 
   toggleStar(index:number):void{
-    if(index!==0 && this.stars[index-1]===true && this.stars[index+1]===false){
-      this.stars[index] = !this.stars[index];
+    if(index!==0 && this.yumFactor[index-1]===true && this.yumFactor[index+1]===false){
+      this.yumFactor[index] = !this.yumFactor[index];
     }
 
-    if(index===4 && this.stars[3]===true){
-      this.stars[4] = !this.stars[4];
+    if(index===4 && this.yumFactor[3]===true){
+      this.yumFactor[4] = !this.yumFactor[4];
     }
   }
 
@@ -82,8 +82,8 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
       const cake: Cake = {
         title: title,
         comment: comment,
-        image: file,
-        stars: this.stars,
+        imagePath: file,
+        yumFactor: this.yumFactor,
         creator: this.creator
       }
   
@@ -91,10 +91,9 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
 
       this.id = undefined;
       this.imgUrl = undefined;
-      this.stars = [true,false,false,false,false];
+      this.yumFactor = [true,false,false,false,false];
       this.cakeForm.reset();
       this.creator = undefined;
-
       this._router.navigate(['list']);
     }
    
@@ -104,14 +103,14 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     const id:string = cake.id;
     const title:string = cake.title;
     const comment: string = cake.comment;
-    const image: string | File = cake.image;
-    const stars: boolean[] = cake.stars;
+    const imagePath: string | File = cake.imagePath;
+    const yumFactor: boolean[] = cake.yumFactor;
     const creator:string = cake.creator;
 
     this.id = id;
-    this.cakeForm.patchValue({title: title, comment: comment, image: image});
-    this.stars = stars;
-    this.imgUrl = (image as string);
+    this.cakeForm.patchValue({title: title, comment: comment, image: imagePath});
+    this.yumFactor = yumFactor;
+    this.imgUrl = (imagePath as string);
     this.creator = creator;
 
     this.isEditing = true;
@@ -127,27 +126,26 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
       const title: string = this.cakeForm.get("title").value;
       const comment:string = this.cakeForm.get("comment").value;
       const imageForm: File = this.cakeForm.get('image').value;
-      const stars: boolean[] = this.stars;
-      let image: string | File; 
+      const yumFactor: boolean[] = this.yumFactor;
+      let imagePath: string | File; 
       if(imageForm===undefined){
-        image = this.imgUrl;
+        imagePath = this.imgUrl;
       }
       else{
-        image = imageForm;
+        imagePath = imageForm;
       }
   
-      const cake:Cake = {id:id, title:title, comment:comment, image:image, stars:stars, creator:this.creator}
+      const cake:Cake = {id:id, title:title, comment:comment, imagePath:imagePath, yumFactor:yumFactor, creator:this.creator}
       this.cakeService.editCake(cake);
 
       this.id = undefined;
       this.imgUrl = undefined;
-      this.stars = [true,false,false,false,false];
+      this.yumFactor = [true,false,false,false,false];
       this.isEditing= false;
       this.cakeForm.reset();
       this.creator = undefined;
     }
     
   }
-
 
 }

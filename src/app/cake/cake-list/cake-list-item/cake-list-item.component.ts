@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class CakeListItemComponent implements OnInit {
   @Input() public id:string;
   @Input() public title:string;
-  @Input() public image:string;
+  @Input() public imagePath:string;
 
   public currentUserSub:Subscription = new Subscription();
 
@@ -21,7 +21,6 @@ export class CakeListItemComponent implements OnInit {
   }
 
   deteils():void{
-    console.log('asdasd')
     this._router.navigate([`/${this.id}`])
   }
 

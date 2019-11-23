@@ -10,14 +10,14 @@
             </mat-card-title>
     
             <mat-card-subtitle class="cake-card__header--subtitle">        
-                <mat-icon class="cake-card__header--subtitle-stars" *ngFor="let star of (currentCake.stars | active)">star</mat-icon>
-                <mat-icon class="cake-card__header--subtitle-stars--empty" *ngFor="let star of (currentCake.stars | inactive)">star_border</mat-icon>
+                <mat-icon class="cake-card__header--subtitle-stars" *ngFor="let star of (currentCake.yumFactor | active)">star</mat-icon>
+                <mat-icon class="cake-card__header--subtitle-stars--empty" *ngFor="let star of (currentCake.yumFactor | inactive)">star_border</mat-icon>
     
             </mat-card-subtitle>
     
         </mat-card-header>
     
-        <img class="cake-card__image" mat-card-image [src]="currentCake.image" [alt]="currentCake.title">
+        <img class="cake-card__image" mat-card-image [src]="currentCake.imagePath" [alt]="currentCake.title">
         
         <mat-card-content class="cake-card__content">
             <mat-divider [inset]="true"></mat-divider>
