@@ -37,7 +37,6 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
    this._authModeLoginSubjectSubscription = this._authModeLoginSubject.subscribe(isLogin=>{
     this.authModeLogin = isLogin;
     this.handleEmailValidators(this.authModeLogin);
-    console.log("auth login mode is:"+this.authModeLogin)
     })
 
     this.loadingSubscription = this.authService.loadingSubject.subscribe(loading=>{
