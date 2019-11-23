@@ -12,7 +12,7 @@ export class DualLoginGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       const isLoggedIn:boolean = this._authServ.isLoggedIn;
       if(isLoggedIn===true){
-        this._router.navigate(['/list']);
+        this._router.navigate(['/cake/list']);
         return false;
       }
       else{

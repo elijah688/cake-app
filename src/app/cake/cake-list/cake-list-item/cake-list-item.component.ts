@@ -21,7 +21,7 @@ export class CakeListItemComponent implements OnInit {
   }
 
   deteils():void{
-    this._router.navigate([`/${this.id}`])
+    this._router.navigate([`/cake/${this.id}`])
   }
 
 }

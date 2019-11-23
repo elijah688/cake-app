@@ -59,7 +59,7 @@ export class AuthenticationService {
       this._isLoggedIn = true;
       
       this._loadingSubject.next(false);
-      this._router.navigate(['/list'])
+      this._router.navigate(['/cake/list'])
 
       this._snack.openFromComponent(SnackbarComponent, {
         duration: 3000,

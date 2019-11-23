@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, Subject, BehaviorSubject, Observer } from 'rxjs';
-import { catchError, map, } from 'rxjs/operators';
+import { catchError, } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Cake } from '../cake-model/cake.model';
 import { Router } from '@angular/router';
@@ -66,7 +66,7 @@ export class CakeService {
 
 
   editCake(cake:Cake):void{
-    this._router.navigate(['list']);
+    this._router.navigate(['/cake/list']);
 
     const id:string = cake.id;
     const title:string = cake.title;
@@ -106,7 +106,7 @@ export class CakeService {
   }
 
   deleteCake(id:string){
-    this._router.navigate(['/list']);
+    this._router.navigate(['/cake/list']);
     
     this.http.delete<{message:string}>(`${BACKEND_URL}/${id}`)
     .pipe(
@@ -135,7 +135,7 @@ export class CakeService {
 
   editPatchForm(cake:Cake):void{
     if(cake){
-      this._router.navigate([`design/${cake.id}`]);
+      this._router.navigate([`cake/design/${cake.id}`]);
       this._patchCakeSubject.next(cake);
     }
   }

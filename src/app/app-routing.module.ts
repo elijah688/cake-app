@@ -1,22 +1,12 @@
-import { AuthenticationComponent } from './authentication/authentication.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CakeListComponent } from './cake/cake-list/cake-list.component';
-
 import { AuthGuard } from './guards/auth-guard.service';
 import { DualLoginGuard } from './guards/dual-login-guard.service';
-import { CakeDesignComponent } from './cake/cake-design/cake-design.component';
-import { CakeComponent } from './cake/cake/cake.component';
-
 
 const routes: Routes = [
-  { path: 'auth', component: AuthenticationComponent, canActivate:[DualLoginGuard] },
-  { path: 'design', component: CakeDesignComponent, canActivate:[AuthGuard], children:[
-    { path: ':id', component: CakeDesignComponent, canActivate:[AuthGuard]},
-  ]},
-  { path: 'list', component: CakeListComponent, canActivate:[AuthGuard]},
-  { path: ':id', component: CakeComponent, canActivate:[AuthGuard]},
-  { path: '**', redirectTo: '/auth' }
+  { path: 'auth', loadChildren: './authentication/authentication.module#AuthenticationModule', canActivate:[DualLoginGuard] },
+  { path: 'cake', loadChildren: './cake/cake.module#CakeModule', canActivate:[AuthGuard] },
+  { path: '**', redirectTo: 'cake' }
 ]
 
 @NgModule({
