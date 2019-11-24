@@ -22,12 +22,10 @@ export class CakeService {
   private _patchCakeSubject:BehaviorSubject<Cake> = new BehaviorSubject<Cake>(null);
   
   private _pageOptionsSubject:BehaviorSubject<PageOptions> = new BehaviorSubject<PageOptions>({currentPage:1,pageSize:2});
-  private _loadingSubject:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private http:HttpClient, private _router:Router) { }
 
   getCakes(): void {
-    // this._loadingSubject.next(true);
     this._pageOptionsSubject.subscribe(pageOptions=>{
       const currentPage:number = pageOptions.currentPage;
       const pageSize:number = pageOptions.pageSize;
@@ -35,7 +33,6 @@ export class CakeService {
 
       this.http.get<{message:string, cakes:Cake[], count:number}>(BACKEND_URL + queryParams).subscribe(res=>{
         this._cakesSubject.next({cakes:res.cakes, count:res.count});
-        // this._loadingSubject.next(false);
       })
     })
   }
@@ -147,10 +144,6 @@ export class CakeService {
 
   get pageOptionsSubject():Subject<PageOptions>{
     return this._pageOptionsSubject;
-  }
-
-  get loadingSubject():Observable<boolean>{
-    return this._loadingSubject.asObservable();
   }
 
 

@@ -3,7 +3,7 @@
   <mat-sidenav  class="sidenav__snav" #sidenav>
 
     <div class="sidenav__buttons">
-      <button *ngIf="_visible===true" mat-icon-button [routerLink]="['/cake/design']" routerLinkActive="mat-primary" (click)="patchDesign(); sidenav.toggle();">
+      <button *ngIf="_visible===true" mat-icon-button [routerLink]="['/cake/design']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="mat-primary" (click)="patchDesign(); sidenav.toggle();">
         <mat-icon>add</mat-icon>
       </button>
       <button *ngIf="_visible===true" mat-icon-button [routerLink]="['/cake/list']" routerLinkActive="mat-primary" (click)="sidenav.toggle();">
