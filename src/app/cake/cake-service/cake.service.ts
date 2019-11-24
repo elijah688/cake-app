@@ -27,7 +27,7 @@ export class CakeService {
   constructor(private http:HttpClient, private _router:Router) { }
 
   getCakes(): void {
-    this._loadingSubject.next(true);
+    // this._loadingSubject.next(true);
     this._pageOptionsSubject.subscribe(pageOptions=>{
       const currentPage:number = pageOptions.currentPage;
       const pageSize:number = pageOptions.pageSize;
@@ -35,7 +35,7 @@ export class CakeService {
 
       this.http.get<{message:string, cakes:Cake[], count:number}>(BACKEND_URL + queryParams).subscribe(res=>{
         this._cakesSubject.next({cakes:res.cakes, count:res.count});
-        this._loadingSubject.next(false);
+        // this._loadingSubject.next(false);
       })
     })
   }

@@ -20,21 +20,22 @@ export class CakeListComponent implements OnInit, OnDestroy {
   public pageSize:number = 2;
   public currentPage:number = 1;
   public pageSizeOptions:number[] = [1, 2, 5, 10];
-  loading = true;
+  public loading:boolean = true;
 
   constructor(private cakeService:CakeService, private cakeSocketServ:CakeSocketService) { }
 
   ngOnInit() {
+    console.log(this.loading)
+    console.log(this.cakes.length)
     this.cakeService.getCakes();
     this.cakesSubscription = this.cakeService.cakesSubject.subscribe(cakeData=>{
+      this.loading = false;
       this.cakes = cakeData.cakes;
       this.length = cakeData.count;
-      this.loading = false;
     })
 
     this.cakeSocketServ.onSocketBroadcast().subscribe(()=>{
       this.cakeService.getCakes();
-      this.loading = true;
     })
 
 
