@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Cake } from '../cake-model/cake.model';
 import { CakeService, PageOptions } from '../cake-service/cake.service';
 import { Subscription } from 'rxjs';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import {  PageEvent } from '@angular/material/paginator';
 import { CakeSocketService } from '../cake-socket-service/cake-socket.service';
 
 @Component({
@@ -14,6 +14,8 @@ import { CakeSocketService } from '../cake-socket-service/cake-socket.service';
 export class CakeListComponent implements OnInit, OnDestroy {
 
   public cakesSubscription:Subscription = new Subscription();
+  public socketSub:Subscription = new Subscription();
+
   public cakes: Cake[] = [];
 
   public length:number = 100
@@ -25,8 +27,9 @@ export class CakeListComponent implements OnInit, OnDestroy {
   constructor(private cakeService:CakeService, private cakeSocketServ:CakeSocketService) { }
 
   ngOnInit() {
-    console.log(this.loading)
-    console.log(this.cakes.length)
+    const pageOptions:PageOptions ={currentPage:1, pageSize: 2}
+    this.cakeService.pageOptionsSubject.next(pageOptions);
+
     this.cakeService.getCakes();
     this.cakesSubscription = this.cakeService.cakesSubject.subscribe(cakeData=>{
       this.loading = false;
@@ -34,7 +37,8 @@ export class CakeListComponent implements OnInit, OnDestroy {
       this.length = cakeData.count;
     })
 
-    this.cakeSocketServ.onSocketBroadcast().subscribe(()=>{
+    this.socketSub = this.cakeSocketServ.onSocketBroadcast().subscribe(()=>{
+     
       this.cakeService.getCakes();
     })
 
@@ -43,6 +47,7 @@ export class CakeListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cakesSubscription.unsubscribe();
+    this.socketSub.unsubscribe();
   }
 
 
@@ -58,6 +63,7 @@ export class CakeListComponent implements OnInit, OnDestroy {
     this.currentPage = currentPage;
 
     this.cakeService.pageOptionsSubject.next(pageOptions);
+    
   }
 
 }
