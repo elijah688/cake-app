@@ -22,7 +22,7 @@
               <mat-icon>menu</mat-icon>
           </button>
           <div *ngIf="_visible===true" class="navigation__main-toolbar-controls">
-            <button mat-button [routerLink]="['/cake/design']" routerLinkActive="mat-primary"  (click)="patchDesign()">Add Cake</button>
+            <button mat-button [routerLink]="['/cake/design']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="mat-primary"  (click)="patchDesign()">Add Cake</button>
             <button mat-button [routerLink]="['/cake/list']" routerLinkActive="mat-primary">Show Cakes</button>
             <button mat-button (click)="logOut()">Log Out</button>
           </div>

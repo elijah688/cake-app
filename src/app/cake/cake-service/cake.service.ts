@@ -41,7 +41,7 @@ export class CakeService {
   }
   
   addCake(cake: Cake): void {
-    this._router.navigate(['list']);
+    this._router.navigate(['/cake/list']);
     
     const title:string = cake.title;
     const comment:string = cake.comment;
@@ -139,7 +139,6 @@ export class CakeService {
       this._patchCakeSubject.next(cake);
     }
     else{
-      const emptyCake:Cake = {id:undefined, title:undefined, comment:undefined, imagePath:undefined, yumFactor:1, creator: undefined }
       this._router.navigate([`cake/design`]);
       this._patchCakeSubject.next(null);
     }
@@ -153,7 +152,6 @@ export class CakeService {
   get loadingSubject():Observable<boolean>{
     return this._loadingSubject.asObservable();
   }
-
 
 
   yumToStars(yumFactor):boolean[]{

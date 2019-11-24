@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { AuthenticationService } from '../authentication/authentication-service/authentication.service';
 import { Router } from '@angular/router';
 import { CakeService } from '../cake/cake-service/cake.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -11,13 +12,15 @@ import { CakeService } from '../cake/cake-service/cake.service';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.sass']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
+
   public _visible:boolean = false;
+  private _visibleSub:Subscription = new Subscription();
 
   constructor(private authService:AuthenticationService, private _cakeServ:CakeService, private _router:Router) { }
 
   ngOnInit() {
-    this.authService.currentUserIdSubject.subscribe(res=>{
+    this._visibleSub = this.authService.currentUserIdSubject.subscribe(res=>{
       if(res===null){
         this._visible = false;
       }
@@ -25,6 +28,9 @@ export class NavigationComponent implements OnInit {
         this._visible = true;
       }
     })
+
+   
+
   }
 
   logOut():void{
@@ -36,4 +42,11 @@ export class NavigationComponent implements OnInit {
   patchDesign():void{
     this._cakeServ.editPatchForm(null);
   }
+
+
+  ngOnDestroy(): void {
+    this._visibleSub.unsubscribe()
+  }
+
+
 }
