@@ -14,16 +14,16 @@
                     <mat-label>
                         <mat-icon>cake</mat-icon> 
                         <b> Cake</b> 
-                        <i> title</i>
+                        <i> title  </i>
                     </mat-label>
                     <input 
                         formControlName="title" 
                         matInput placeholder="Super Tasty Cake" 
-                        (focus)="titleIcon.color='accent'" 
-                        (blur)="titleIcon.color='none'"
+                        (focus)="iconTitleActive = true" 
+                        (blur)="iconTitleActive = false" 
                         [errorStateMatcher]="_errorStateMatcher">
                         
-                    <mat-icon #titleIcon matSuffix>cake</mat-icon>
+                    <mat-icon #titleIcon matSuffix [ngClass]="iconTitleActive === true ? 'cake-design__form-title__icon--active' : 'cake-design__form-title__icon--inactive'">cake</mat-icon>
                     <mat-error *ngIf="cakeForm.get('title').hasError('required')">
                         <span>
                             <b>Cake</b>
@@ -44,11 +44,11 @@
                         rows="5" 
                         formControlName="comment" 
                         matInput placeholder="My fave, delicious!" 
-                        (focus)="commentIcon.color='accent'" 
-                        (blur)="commentIcon.color='none'"
+                        (focus)="iconCommentActive = true" 
+                        (blur)="iconCommentActive = false" 
                         [errorStateMatcher]="_errorStateMatcher ">
                         </textarea>
-                    <mat-icon #commentIcon matSuffix>comment</mat-icon>
+                    <mat-icon #commentIcon matSuffix [ngClass]="iconCommentActive === true ? 'cake-design__form-comment__icon--active' : '.cake-design__form-comment__icon--inactive'">comment</mat-icon>
                     <mat-error *ngIf="cakeForm.get('comment').hasError('required')">
                         <span>
                             <b>Cake</b>

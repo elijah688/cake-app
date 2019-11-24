@@ -24,7 +24,9 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
    
   public isEditing: boolean = false;
   public patchCakeSub:Subscription = new Subscription();
-  private _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
+  public _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
+  public iconTitleActive:boolean = false;
+  public iconCommentActive:boolean = false;
 
   constructor(
     private fb: FormBuilder,
