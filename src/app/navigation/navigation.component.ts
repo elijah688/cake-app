@@ -12,7 +12,7 @@ import { CakeService } from '../cake/cake-service/cake.service';
   styleUrls: ['./navigation.component.sass']
 })
 export class NavigationComponent implements OnInit {
-  private _visible:boolean = false;
+  public _visible:boolean = false;
 
   constructor(private authService:AuthenticationService, private _cakeServ:CakeService, private _router:Router) { }
 
@@ -32,12 +32,8 @@ export class NavigationComponent implements OnInit {
     this.authService.logOut();
   }
 
-  showCakes():void{
-    this._router.navigate(['/cake/list'])
-  }
 
-  showDesign():void{
+  patchDesign():void{
     this._cakeServ.editPatchForm(null);
-    this._router.navigate(['/cake/design'])
   }
 }

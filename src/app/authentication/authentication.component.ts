@@ -19,7 +19,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   private _authModeLoginSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private _authModeLoginSubjectSubscription:Subscription = new Subscription();
   private _patchEmailSub:Subscription = new Subscription();
-  private _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
+  public _errorStateMatcher:MyErrorStateMatcher = new MyErrorStateMatcher();
   loading:boolean = false; 
   loadingSubscription:Subscription = new Subscription();
 

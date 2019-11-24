@@ -138,6 +138,11 @@ export class CakeService {
       this._router.navigate([`cake/design/${cake.id}`]);
       this._patchCakeSubject.next(cake);
     }
+    else{
+      const emptyCake:Cake = {id:undefined, title:undefined, comment:undefined, imagePath:undefined, yumFactor:1, creator: undefined }
+      this._router.navigate([`cake/design`]);
+      this._patchCakeSubject.next(null);
+    }
   }
 
 

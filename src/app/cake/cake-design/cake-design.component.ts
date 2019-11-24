@@ -34,11 +34,14 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
-    console.log('ININITED')
     this.patchCakeSub = this.cakeService.patchCakeSubject.subscribe(cake=>{
-      console.log('cake')
       if(cake){
+        this.isEditing = true;
         this.patchValuesOnEdit(cake);
+      }
+      else{
+        this.isEditing = false;
+        this.resetValuesOnAdd();
       }
     })
   }
@@ -99,12 +102,13 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
   }
 
   patchValuesOnEdit(cake:Cake){
-    const id:string = cake.id;
-    const title:string = cake.title;
-    const comment: string = cake.comment;
-    const imagePath: string | File = cake.imagePath;
-    const yumFactor: number = cake.yumFactor;
-    const creator:string = cake.creator;
+
+    const id:string = cake.id
+    const title:string = cake.title
+    const comment:string = cake.comment
+    const imagePath: File | string = cake.imagePath
+    const yumFactor:number = cake.yumFactor
+    const creator:string = cake.creator
 
     this.id = id;
     this.cakeForm.patchValue({title: title, comment: comment, image: imagePath});
@@ -112,8 +116,16 @@ export class CakeDesignComponent implements OnInit, OnDestroy {
     this.imgUrl = (imagePath as string);
     this.creator = creator;
 
-    this.isEditing = true;
   }
+
+  resetValuesOnAdd(){
+    this.id = undefined;
+    this.cakeForm.patchValue({title: undefined, comment: undefined, image: undefined});
+    this.stars = this.cakeService.yumToStars(1);
+    this.imgUrl = (undefined as string);
+    this.creator = undefined;
+  }
+
 
   ngOnDestroy(){
     this.patchCakeSub.unsubscribe();

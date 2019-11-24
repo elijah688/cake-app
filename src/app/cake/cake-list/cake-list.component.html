@@ -1,5 +1,6 @@
 
 <app-spinner *ngIf="loading===true" class='cake-list__spinner'></app-spinner>
+
 <div class="cake-list-container">
     <div *ngIf="cakes.length===0 && loading===false" class="cake-list__no-cakes">
         <h1 class="mat-display-1" >
@@ -8,18 +9,18 @@
         </h1>
     </div>
     <ul *ngIf="loading===false" class="cake-list__list">
-            <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
-                <app-cake-list-item
-                    [id]="cake.id"
-                    [title]="cake.title" 
-                    [imagePath]="cake.imagePath">
-                </app-cake-list-item>
-            </li>
-        </ul>
-        <mat-paginator class="cake-list__paginator" 
-            [length]="length"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="pageSizeOptions"
-            (page)="setPaginatorOptions($event)">
-        </mat-paginator>
+        <li class="cake-list__list-item" *ngFor="let cake of cakes"> 
+            <app-cake-list-item
+                [id]="cake.id"
+                [title]="cake.title" 
+                [imagePath]="cake.imagePath">
+            </app-cake-list-item>
+        </li>
+    </ul>
+    <mat-paginator *ngIf="cakes.length!==0 && loading===false" class="cake-list__paginator" 
+        [length]="length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="setPaginatorOptions($event)">
+    </mat-paginator>
 </div>
